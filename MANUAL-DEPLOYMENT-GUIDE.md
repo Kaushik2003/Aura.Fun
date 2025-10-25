@@ -40,7 +40,7 @@ forge build
 
 ```bash
 # Fork Ethereum Sepolia (recommended)
-anvil --fork-url https://ethereum-sepolia-rpc.publicnode.com --chain-id 11155111
+anvil --fork-url https://forno.celo-sepolia.celo-testnet.org --chain-id 11142220
 ```
 
 **Keep this terminal running!** Anvil will output 10 pre-funded accounts.
@@ -60,11 +60,7 @@ cast chain-id --rpc-url $RPC_URL
 ## Deploy Contracts
 
 ```bash
-forge script script/Deploy.s.sol:Deploy \
-  --rpc-url $RPC_URL \
-  --broadcast \
-  --private-key $PRIVATE_KEY \
-  -vv
+forge script script/Deploy.s.sol:Deploy --rpc-url $RPC_URL --broadcast --private-key $PRIVATE_KEY -vv
 
 # Save addresses
 cat deployments.json
@@ -86,10 +82,10 @@ cast send $FACTORY \
   "createVault(string,string,address,uint256)" \
   "CreatorToken" "CRTR" $CREATOR "1000000000000000000000" \
   --rpc-url $RPC_URL \
-  --private-key $PRIVATE_KEY
+  --private-key $CREATOR
 
 # Get vault address from logs
-VAULT="0x..."  # From VaultCreated event
+VAULT="0x9973b3FeB8e96654DcBBEd2749E9b21e69A132D1"  # From VaultCreated event
 
 # Get token address
 RAW_TOKEN=$(cast call $VAULT "token()" --rpc-url $RPC_URL)

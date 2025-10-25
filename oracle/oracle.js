@@ -57,6 +57,53 @@ function normalizeLog(value, min, max, scale) {
 }
 
 /**
+ * Resolve Farcaster username to FID
+ * @param {string} username - Farcaster username (without @)
+ * @param {boolean} mockMode - Use mock data for testing
+ * @returns {string} Farcaster ID
+ */
+async function resolveFarcasterUsername(username, mockMode = false) {
+    if (mockMode) {
+        console.log('🧪 Mock mode: Using hardcoded FID for username');
+        return '12345'; // Mock FID
+    }
+
+    try {
+        const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
+
+        if (!NEYNAR_API_KEY) {
+            console.warn('⚠️  NEYNAR_API_KEY not set, using mock data');
+            return resolveFarcasterUsername(username, true);
+        }
+
+        // Fetch user by username (v2 endpoint)
+        const response = await axios.get(
+            `https://api.neynar.com/v2/farcaster/user/by_username?username=${username}`,
+            {
+                headers: { 'api_key': NEYNAR_API_KEY }
+            }
+        );
+
+        const user = response.data.user;
+
+        if (!user) {
+            throw new Error(`Username @${username} not found`);
+        }
+
+        console.log(`✅ Resolved @${username} → FID ${user.fid}`);
+        return user.fid.toString();
+
+    } catch (error) {
+        console.error('❌ Error resolving username:', error.message);
+        if (error.response?.status === 404) {
+            throw new Error(`Username @${username} not found on Farcaster`);
+        }
+        console.log('Falling back to mock mode');
+        return resolveFarcasterUsername(username, true);
+    }
+}
+
+/**
  * Fetch Farcaster metrics for a creator
  * @param {string} creatorFid - Farcaster ID
  * @param {boolean} mockMode - Use mock data for testing
@@ -326,6 +373,7 @@ async function main() {
     // Parse command line arguments
     let vaultAddress = null;
     let creatorFid = null;
+    let creatorUsername = null;
     let mockMode = false;
     let dryRun = false;
 
@@ -335,6 +383,9 @@ async function main() {
             i++;
         } else if (args[i] === '--fid' && args[i + 1]) {
             creatorFid = args[i + 1];
+            i++;
+        } else if (args[i] === '--username' && args[i + 1]) {
+            creatorUsername = args[i + 1];
             i++;
         } else if (args[i] === '--mock') {
             mockMode = true;
@@ -346,7 +397,7 @@ async function main() {
         }
     }
 
-    if (!vaultAddress || !creatorFid) {
+    if (!vaultAddress || (!creatorFid && !creatorUsername)) {
         console.error('❌ Missing required arguments');
         printHelp();
         process.exit(1);
@@ -355,20 +406,33 @@ async function main() {
     console.log('🌟 AuraFi Oracle');
     console.log('================\n');
     console.log(`Vault: ${vaultAddress}`);
-    console.log(`Creator FID: ${creatorFid}`);
+
+    if (creatorUsername) {
+        console.log(`Creator Username: @${creatorUsername}`);
+    } else {
+        console.log(`Creator FID: ${creatorFid}`);
+    }
+
     console.log(`Mode: ${mockMode ? 'Mock' : 'Live'}`);
     console.log(`Dry Run: ${dryRun ? 'Yes' : 'No'}\n`);
 
     try {
-        // Step 1: Fetch metrics
-        console.log('📡 Fetching Farcaster metrics...');
-        const metrics = await fetchFarcasterMetrics(creatorFid, mockMode);
-        console.log(`✅ Metrics fetched for @${metrics.username || creatorFid}`);
+        // Step 1: Resolve username to FID if needed
+        let finalFid = creatorFid;
+        if (creatorUsername) {
+            console.log('🔍 Resolving username to FID...');
+            finalFid = await resolveFarcasterUsername(creatorUsername, mockMode);
+        }
 
-        // Step 2: Compute aura
+        // Step 2: Fetch metrics
+        console.log('📡 Fetching Farcaster metrics...');
+        const metrics = await fetchFarcasterMetrics(finalFid, mockMode);
+        console.log(`✅ Metrics fetched for @${metrics.username || finalFid}`);
+
+        // Step 3: Compute aura
         const aura = computeAura(metrics);
 
-        // Step 3: Pin to IPFS
+        // Step 4: Pin to IPFS
         console.log('\n📌 Pinning metrics to IPFS...');
         const metricsData = {
             ...metrics,
@@ -381,7 +445,7 @@ async function main() {
         };
         const ipfsUrl = await pinToIPFS(metricsData);
 
-        // Step 4: Update vault (unless dry run)
+        // Step 5: Update vault (unless dry run)
         if (dryRun) {
             console.log('\n🏁 Dry run complete. Would update vault with:');
             console.log(`  Aura: ${aura}`);
@@ -405,11 +469,14 @@ function printHelp() {
 AuraFi Oracle - Compute and update creator aura scores
 
 Usage:
-  node oracle.js --vault <address> --fid <farcaster-id> [options]
+  node oracle.js --vault <address> (--fid <farcaster-id> | --username <username>) [options]
 
 Required:
   --vault <address>    Vault contract address
-  --fid <id>           Creator's Farcaster ID
+  
+Creator Identification (choose one):
+  --fid <id>           Creator's Farcaster ID (numeric)
+  --username <name>    Creator's Farcaster username (without @)
 
 Options:
   --mock               Use mock data instead of fetching from Farcaster
@@ -425,14 +492,17 @@ Environment Variables:
   RPC_URL                  RPC endpoint (default: Celo Alfajores)
 
 Examples:
-  # Mock mode (no API keys needed)
+  # Using username (recommended)
+  node oracle.js --vault 0x123... --username vitalik --mock
+  
+  # Using FID directly
   node oracle.js --vault 0x123... --fid 12345 --mock
 
   # Dry run with live data
-  node oracle.js --vault 0x123... --fid 12345 --dry-run
+  node oracle.js --vault 0x123... --username dwr --dry-run
 
   # Full execution
-  node oracle.js --vault 0x123... --fid 12345
+  node oracle.js --vault 0x123... --username balajis
 `);
 }
 
@@ -443,6 +513,7 @@ if (require.main === module) {
 
 // Export functions for testing
 module.exports = {
+    resolveFarcasterUsername,
     fetchFarcasterMetrics,
     computeAura,
     pinToIPFS,

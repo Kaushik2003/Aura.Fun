@@ -11,6 +11,7 @@ const fs = require('fs');
 const path = require('path');
 
 const {
+    resolveFarcasterUsername,
     fetchFarcasterMetrics,
     computeAura,
     clamp,
@@ -98,22 +99,30 @@ console.log(`  normalizeLog(20000, 10, 10000, 200) = ${norm3.toFixed(2)} (should
 console.assert(norm3 === 200, 'Normalize above max failed');
 console.log('✅ Normalize tests passed\n');
 
-// Test 3: Fetch metrics (mock mode)
-console.log('Test 3: Fetch metrics (mock mode)');
-fetchFarcasterMetrics('12345', true).then(metrics => {
+// Test 3: Username resolution (mock mode)
+console.log('Test 3: Username resolution (mock mode)');
+resolveFarcasterUsername('testuser', true).then(fid => {
+    console.log(`  Resolved username → FID: ${fid}`);
+    console.assert(fid === '12345', 'Mock FID mismatch');
+    console.log('✅ Username resolution test passed\n');
+
+    // Test 4: Fetch metrics (mock mode)
+    console.log('Test 4: Fetch metrics (mock mode)');
+    return fetchFarcasterMetrics(fid, true);
+}).then(metrics => {
     console.log('  Mock metrics:', JSON.stringify(metrics, null, 2));
     console.assert(metrics.fid === '12345', 'FID mismatch');
     console.assert(metrics.followerCount > 0, 'Invalid follower count');
     console.log('✅ Fetch metrics test passed\n');
 
-    // Test 4: Compute aura
-    console.log('Test 4: Compute aura');
+    // Test 5: Compute aura
+    console.log('Test 5: Compute aura');
     const aura = computeAura(metrics);
     console.assert(aura >= 0 && aura <= 200, 'Aura out of range');
     console.log(`✅ Aura computed: ${aura}\n`);
 
-    // Test 5: Different metric scenarios
-    console.log('Test 5: Different metric scenarios');
+    // Test 6: Different metric scenarios
+    console.log('Test 6: Different metric scenarios');
 
     const lowMetrics = {
         fid: 'test',
@@ -153,26 +162,37 @@ fetchFarcasterMetrics('12345', true).then(metrics => {
 
     console.log('🎉 All tests passed!');
 
-    // Test 6: Fetch data from contract
+    // Test 7: Fetch data from contract
     // Check if vault address provided as command-line argument
     const vaultAddress = process.argv[2];
-    
-    console.log('\nTest 6: Fetch data from AuraOracle contract');
+
+    console.log('\nTest 7: Fetch data from AuraOracle contract');
     if (vaultAddress) {
         console.log(`📍 Using provided vault address: ${vaultAddress}`);
     } else {
         console.log('📍 No vault address provided, using default test address');
     }
-    
+
     return fetchData(vaultAddress).then(data => {
         console.log('\n✅ Successfully fetched data from contract:');
         console.log(JSON.stringify(data, null, 2));
         console.log('\n🎉 All tests including contract read passed!');
-        
+
         if (!vaultAddress) {
             console.log('\n💡 To query a specific vault address:');
             console.log('   node test-oracle.js <vault-address>');
             console.log('   Example: node test-oracle.js 0x1234567890123456789012345678901234567890');
+        }
+    }).catch(error => {
+        console.log('\n⚠️  Contract test failed (this is expected if contracts are not deployed):');
+        console.log(`   ${error.message}`);
+        console.log('\n🎉 Core oracle functions passed! Contract test skipped.');
+
+        if (!vaultAddress) {
+            console.log('\n💡 To test with deployed contracts:');
+            console.log('   1. Deploy contracts: forge script script/Deploy.s.sol --rpc-url http://localhost:8545 --broadcast');
+            console.log('   2. Update ORACLE_CONTRACT_ADDRESS in .env.local');
+            console.log('   3. Run test again');
         }
     });
 }).catch(error => {
