@@ -87,7 +87,7 @@ export default function FanVaultDetailPage({ params }: FanVaultDetailPageProps) 
                                 Vault Not Active
                             </h3>
                             <p className="text-sm text-yellow-700 mt-1">
-                                This vault is not yet active. The creator needs to bootstrap it with 100 CELO first.
+                                This vault is not yet active. The creator needs to bootstrap it with 0.001 CELO first.
                             </p>
                         </div>
                     </div>

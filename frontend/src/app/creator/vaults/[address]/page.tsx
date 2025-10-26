@@ -124,7 +124,7 @@ export default function CreatorVaultManagementPage({ params }: CreatorVaultManag
                                     Vault Needs Bootstrap
                                 </h3>
                                 <p className="text-sm text-yellow-700 mt-1">
-                                    Your vault is not active yet. Deposit 100 CELO to unlock Stage 1 and enable fan minting.
+                                    Your vault is not active yet. Deposit 0.001 CELO to unlock Stage 1 and enable fan minting.
                                 </p>
                             </div>
                         </div>

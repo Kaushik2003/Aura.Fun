@@ -60,10 +60,10 @@ contract Deploy is Script {
         console.log("");
         console.log("Default stage configurations initialized:");
         console.log("  Stage 0: 0 CELO stake, 0 tokens capacity");
-        console.log("  Stage 1: 100 CELO stake, 500 tokens capacity");
-        console.log("  Stage 2: 300 CELO stake, 2500 tokens capacity");
-        console.log("  Stage 3: 800 CELO stake, 9500 tokens capacity");
-        console.log("  Stage 4: 1800 CELO stake, 34500 tokens capacity");
+        console.log("  Stage 1: 0.001 CELO stake, 50 tokens capacity");
+        console.log("  Stage 2: 0.003 CELO stake, 250 tokens capacity");
+        console.log("  Stage 3: 0.008 CELO stake, 950 tokens capacity");
+        console.log("  Stage 4: 0.018 CELO stake, 3450 tokens capacity");
         console.log("");
 
         // Save deployment addresses to JSON file

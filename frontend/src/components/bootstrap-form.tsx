@@ -13,7 +13,7 @@ interface BootstrapFormProps {
 }
 
 export function BootstrapForm({ vault, onSuccess }: BootstrapFormProps) {
-    const [amount, setAmount] = useState('100') // Pre-fill with minimum requirement
+    const [amount, setAmount] = useState('0.001') // Pre-fill with minimum requirement
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const { writeContract, data: hash, error, isPending } = useWriteContract()
@@ -35,8 +35,8 @@ export function BootstrapForm({ vault, onSuccess }: BootstrapFormProps) {
         e.preventDefault()
 
         const amountNum = parseFloat(amount)
-        if (amountNum < 100) {
-            toast.error('Minimum 100 CELO required to unlock Stage 1')
+        if (amountNum < 0.001) {
+            toast.error('Minimum 0.001 CELO required to unlock Stage 1')
             return
         }
 
@@ -73,7 +73,7 @@ export function BootstrapForm({ vault, onSuccess }: BootstrapFormProps) {
                 <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                         <span className="text-purple-700">Minimum Deposit:</span>
-                        <span className="font-semibold text-purple-900">100 CELO</span>
+                        <span className="font-semibold text-purple-900">0.001 CELO</span>
                     </div>
                     <div className="flex justify-between">
                         <span className="text-purple-700">Unlocks:</span>
@@ -81,7 +81,7 @@ export function BootstrapForm({ vault, onSuccess }: BootstrapFormProps) {
                     </div>
                     <div className="flex justify-between">
                         <span className="text-purple-700">Mint Capacity:</span>
-                        <span className="font-semibold text-purple-900">1,000 tokens</span>
+                        <span className="font-semibold text-purple-900">50 tokens</span>
                     </div>
                 </div>
             </div>
@@ -97,19 +97,19 @@ export function BootstrapForm({ vault, onSuccess }: BootstrapFormProps) {
                             id="amount"
                             value={amount}
                             onChange={(e) => setAmount(e.target.value)}
-                            min="100"
-                            step="0.01"
+                            min="0.001"
+                            step="0.001"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                            placeholder="100.00"
+                            placeholder="0.001"
                             disabled={isLoading}
                         />
                         <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                             <span className="text-gray-500 text-sm">CELO</span>
                         </div>
                     </div>
-                    {parseFloat(amount) < 100 && amount && (
+                    {parseFloat(amount) < 0.001 && amount && (
                         <p className="text-red-600 text-sm mt-1">
-                            Minimum 100 CELO required
+                            Minimum 0.001 CELO required
                         </p>
                     )}
                 </div>
@@ -118,27 +118,27 @@ export function BootstrapForm({ vault, onSuccess }: BootstrapFormProps) {
                 <div className="flex gap-2">
                     <button
                         type="button"
-                        onClick={() => setAmount('100')}
+                        onClick={() => setAmount('0.001')}
                         className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
                         disabled={isLoading}
                     >
-                        100 CELO
+                        0.001 CELO
                     </button>
                     <button
                         type="button"
-                        onClick={() => setAmount('250')}
+                        onClick={() => setAmount('0.01')}
                         className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
                         disabled={isLoading}
                     >
-                        250 CELO
+                        0.01 CELO
                     </button>
                     <button
                         type="button"
-                        onClick={() => setAmount('500')}
+                        onClick={() => setAmount('0.1')}
                         className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
                         disabled={isLoading}
                     >
-                        500 CELO
+                        0.1 CELO
                     </button>
                 </div>
 
@@ -182,7 +182,7 @@ export function BootstrapForm({ vault, onSuccess }: BootstrapFormProps) {
 
                 <button
                     type="submit"
-                    disabled={isLoading || parseFloat(amount) < 100}
+                    disabled={isLoading || parseFloat(amount) < 0.001}
                     className="w-full bg-purple-600 text-white py-3 px-4 rounded-md hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
                 >
                     {isLoading ? (

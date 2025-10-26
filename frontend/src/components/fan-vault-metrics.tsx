@@ -26,7 +26,7 @@ export function FanVaultMetrics({ vault }: FanVaultMetricsProps) {
     }
 
     // Stage progress calculation
-    const stageRequirements = [0, 100, 500, 2500, 10000] // CELO requirements for each stage
+    const stageRequirements = [0, 0.001, 0.003, 0.008, 0.018] // CELO requirements for each stage
     const currentStageReq = stageRequirements[vault.stage] || 0
     const nextStageReq = vault.stage < 4 ? stageRequirements[vault.stage + 1] : null
     const creatorCollateralCelo = Number(formatEther(vault.creatorCollateral))

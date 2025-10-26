@@ -78,7 +78,7 @@ export function CreatorVaultCard({ vault }: CreatorVaultCardProps) {
                     <div className="border-t pt-3">
                         <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
                             <p className="text-sm text-yellow-800 font-medium">⚠️ Bootstrap Required</p>
-                            <p className="text-xs text-yellow-700 mt-1">Deposit 100 CELO to activate vault</p>
+                            <p className="text-xs text-yellow-700 mt-1">Deposit 0.001 CELO to activate vault</p>
                         </div>
                     </div>
                 ) : vault.stage === 4 ? (

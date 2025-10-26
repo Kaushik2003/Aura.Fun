@@ -140,7 +140,7 @@ export default function Home() {
               </h3>
               <p className="text-gray-600">
                 Launch your creator token with custom name, symbol, and Farcaster integration.
-                Bootstrap with 100 CELO to unlock fan minting.
+                Bootstrap with 0.001 CELO to unlock fan minting.
               </p>
             </div>
 

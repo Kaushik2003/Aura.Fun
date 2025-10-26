@@ -31,10 +31,10 @@ interface MintFormProps {
 // Stage mint caps (cumulative)
 const STAGE_MINT_CAPS = [
     0n, // Stage 0: No minting allowed
-    parseEther('1000'), // Stage 1: 1,000 tokens
-    parseEther('10000'), // Stage 2: 10,000 tokens  
-    parseEther('100000'), // Stage 3: 100,000 tokens
-    parseEther('1000000'), // Stage 4: 1,000,000 tokens
+    parseEther('50'), // Stage 1: 50 tokens
+    parseEther('250'), // Stage 2: 250 tokens  
+    parseEther('950'), // Stage 3: 950 tokens
+    parseEther('3450'), // Stage 4: 3,450 tokens
 ]
 
 export function MintForm({ vault, onSuccess }: MintFormProps) {
@@ -86,7 +86,7 @@ export function MintForm({ vault, onSuccess }: MintFormProps) {
                     mintFee: 0n,
                     totalCost: 0n,
                     isValid: false,
-                    errorMessage: 'Vault not bootstrapped. Creator must deposit 100 CELO first.',
+                    errorMessage: 'Vault not bootstrapped. Creator must deposit 0.001 CELO first.',
                 }
             }
 

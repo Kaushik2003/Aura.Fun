@@ -237,7 +237,7 @@ export function StageUnlockForm({ vault, onSuccess }: StageUnlockFormProps) {
                         className="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
                         disabled={isLoading}
                     >
-                        +100 CELO
+                        +0.01 CELO
                     </button>
                 </div>
 

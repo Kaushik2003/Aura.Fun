@@ -36,9 +36,12 @@ export function calculateSupplyCap(aura: number, baseCap: bigint): bigint {
   // Calculate multiplier: 1 + 0.75 * (aura - 100) / 100
   const multiplier = 1 + 0.75 * (clampedAura - 100) / 100
   
+  // Clamp multiplier to [0.25, 4] as per contract logic
+  const clampedMultiplier = Math.max(0.25, Math.min(4, multiplier))
+  
   // Apply multiplier to base capacity
   const baseCapFloat = Number(baseCap) / 1e18
-  const supplyCapFloat = baseCapFloat * multiplier
+  const supplyCapFloat = baseCapFloat * clampedMultiplier
   
   // Convert back to bigint with 18 decimals
   return BigInt(Math.floor(supplyCapFloat * 1e18))
@@ -53,8 +56,8 @@ export function calculateSupplyCap(aura: number, baseCap: bigint): bigint {
  * @returns Required collateral as bigint (18 decimals)
  */
 export function calculateRequiredCollateral(quantity: bigint, peg: bigint): bigint {
-  // Calculate: quantity * peg * 1.5
-  return (quantity * peg * BigInt(15)) / BigInt(10)
+  // Calculate: quantity * peg * 1.5, but divide by 1e18 to handle double decimals
+  return (quantity * peg * BigInt(15)) / (BigInt(10) * BigInt(1e18))
 }
 
 /**
@@ -87,8 +90,9 @@ export function calculateHealth(
   }
   
   // Calculate: (totalCollateral / (totalSupply * peg)) * 100
-  const numerator = totalCollateral * BigInt(100)
-  const denominator = totalSupply * peg / BigInt(1e18) // Adjust for 18 decimal precision
+  // Both totalCollateral and (totalSupply * peg) are in wei, so we need to handle decimals properly
+  const numerator = totalCollateral * BigInt(100) * BigInt(1e18)
+  const denominator = totalSupply * peg
   
   if (denominator === 0n) {
     return 0
@@ -116,6 +120,7 @@ export function calculateLiquidation(
   
   // Calculate tokens to remove to reach 150% health
   // tokensToRemove = totalSupply - (newTotalCollateral / (peg * 1.5))
+  // Handle decimals properly: newTotalCollateral is in wei, peg is in wei
   const targetSupply = (newTotalCollateral * BigInt(1e18)) / (peg * BigInt(15) / BigInt(10))
   const tokensToRemove = totalSupply > targetSupply ? totalSupply - targetSupply : 0n
   

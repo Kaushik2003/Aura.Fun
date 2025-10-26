@@ -24,9 +24,19 @@ contract VaultFactory is Ownable {
 
     // ============ Events ============
 
-    event VaultCreated(address indexed creator, address vault, address token, uint256 baseCap);
+    event VaultCreated(
+        address indexed creator,
+        address vault,
+        address token,
+        uint256 baseCap
+    );
 
-    event StageConfigured(address indexed vault, uint8 stage, uint256 stakeRequired, uint256 mintCap);
+    event StageConfigured(
+        address indexed vault,
+        uint8 stage,
+        uint256 stakeRequired,
+        uint256 mintCap
+    );
 
     // ============ Custom Errors ============
 
@@ -41,7 +51,11 @@ contract VaultFactory is Ownable {
      * @param _treasury Address of the Treasury contract
      * @param _oracle Address of the AuraOracle contract
      */
-    constructor(address initialOwner, address _treasury, address _oracle) Ownable(initialOwner) {
+    constructor(
+        address initialOwner,
+        address _treasury,
+        address _oracle
+    ) Ownable(initialOwner) {
         if (_treasury == address(0) || _oracle == address(0)) {
             revert InvalidParameters();
         }
@@ -61,10 +75,12 @@ contract VaultFactory is Ownable {
      * @return vault Address of the deployed CreatorVault
      * @return token Address of the deployed CreatorToken
      */
-    function createVault(string calldata name, string calldata symbol, address creator, uint256 baseCap)
-        external
-        returns (address vault, address token)
-    {
+    function createVault(
+        string calldata name,
+        string calldata symbol,
+        address creator,
+        uint256 baseCap
+    ) external returns (address vault, address token) {
         // Validate parameters
         if (creator == address(0) || baseCap == 0) {
             revert InvalidParameters();
@@ -113,7 +129,12 @@ contract VaultFactory is Ownable {
      * @param stakeRequired Cumulative creator stake required to unlock this stage
      * @param mintCap Maximum tokens mintable at this stage (cumulative)
      */
-    function setStageConfig(address vault, uint8 stage, uint256 stakeRequired, uint256 mintCap) external onlyOwner {
+    function setStageConfig(
+        address vault,
+        uint8 stage,
+        uint256 stakeRequired,
+        uint256 mintCap
+    ) external onlyOwner {
         if (vault == address(0)) {
             revert InvalidParameters();
         }
@@ -134,16 +155,16 @@ contract VaultFactory is Ownable {
         // Stage 0: Not bootstrapped (no requirements, no capacity)
         CreatorVault(vault).setStageConfig(0, 0, 0);
 
-        // Stage 1: Initial unlock (100 CELO stake, 500 tokens capacity)
-        CreatorVault(vault).setStageConfig(1, 100e18, 500e18);
+        // Stage 1: Initial unlock (0.001 CELO stake, 50 tokens capacity)
+        CreatorVault(vault).setStageConfig(1, 0.001e18, 50e18);
 
-        // Stage 2: Growth stage (300 CELO cumulative, 2500 tokens cumulative)
-        CreatorVault(vault).setStageConfig(2, 300e18, 2500e18);
+        // Stage 2: Growth stage (0.003 CELO cumulative, 250 tokens cumulative)
+        CreatorVault(vault).setStageConfig(2, 0.003e18, 250e18);
 
-        // Stage 3: Expansion stage (800 CELO cumulative, 9500 tokens cumulative)
-        CreatorVault(vault).setStageConfig(3, 800e18, 9500e18);
+        // Stage 3: Expansion stage (0.008 CELO cumulative, 950 tokens cumulative)
+        CreatorVault(vault).setStageConfig(3, 0.008e18, 950e18);
 
-        // Stage 4: Mature stage (1800 CELO cumulative, 34500 tokens cumulative)
-        CreatorVault(vault).setStageConfig(4, 1800e18, 34500e18);
+        // Stage 4: Mature stage (0.018 CELO cumulative, 3450 tokens cumulative)
+        CreatorVault(vault).setStageConfig(4, 0.018e18, 3450e18);
     }
 }

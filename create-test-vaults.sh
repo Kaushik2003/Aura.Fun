@@ -38,13 +38,13 @@ echo ""
 echo "Creating vaults..."
 
 echo "Creating Vault 1: TechCreator..."
-cast send $FACTORY "createVault(string,string,address,uint256)" "TechCreator" "TECH" $CREATOR1 "1000000000000000" --rpc-url $RPC_URL --private-key $CREATOR1_KEY
+cast send $FACTORY "createVault(string,string,address,uint256)" "TechCreator" "TECH" $CREATOR1 "50000000000000000000" --rpc-url $RPC_URL --private-key $CREATOR1_KEY
 
 echo "Creating Vault 2: ArtistToken..."
-cast send $FACTORY "createVault(string,string,address,uint256)" "ArtistToken" "ART" $CREATOR2 "2000000000000000" --rpc-url $RPC_URL --private-key $CREATOR2_KEY
+cast send $FACTORY "createVault(string,string,address,uint256)" "ArtistToken" "ART" $CREATOR2 "50000000000000000000" --rpc-url $RPC_URL --private-key $CREATOR2_KEY
 
 echo "Creating Vault 3: MusicToken..."
-cast send $FACTORY "createVault(string,string,address,uint256)" "MusicToken" "MUSIC" $CREATOR3 "500000000000000" --rpc-url $RPC_URL --private-key $CREATOR3_KEY
+cast send $FACTORY "createVault(string,string,address,uint256)" "MusicToken" "MUSIC" $CREATOR3 "50000000000000000000" --rpc-url $RPC_URL --private-key $CREATOR3_KEY
 
 # Step 3: Get vault addresses using creatorToVault mapping
 echo ""
@@ -69,7 +69,18 @@ cast send $ORACLE "pushAura(address,uint256,string)" $VAULT1 180 "QmTechTest" --
 cast send $ORACLE "pushAura(address,uint256,string)" $VAULT2 120 "QmArtTest" --rpc-url $RPC_URL --private-key $DEPLOYER_KEY
 cast send $ORACLE "pushAura(address,uint256,string)" $VAULT3 60 "QmMusicTest" --rpc-url $RPC_URL --private-key $DEPLOYER_KEY
 
+# Verify aura was set
+echo ""
+echo "Verifying aura values..."
+AURA1=$(cast call $ORACLE "getAura(address)" $VAULT1 --rpc-url $RPC_URL)
+AURA2=$(cast call $ORACLE "getAura(address)" $VAULT2 --rpc-url $RPC_URL)
+AURA3=$(cast call $ORACLE "getAura(address)" $VAULT3 --rpc-url $RPC_URL)
+echo "Vault 1 aura: $AURA1 (should be 180)"
+echo "Vault 2 aura: $AURA2 (should be 120)"
+echo "Vault 3 aura: $AURA3 (should be 60)"
+
 # Wait for oracle cooldown
+echo ""
 echo "Waiting for oracle cooldown..."
 cast rpc evm_increaseTime 21601 --rpc-url $RPC_URL > /dev/null
 cast rpc evm_mine --rpc-url $RPC_URL > /dev/null
@@ -78,19 +89,19 @@ cast rpc evm_mine --rpc-url $RPC_URL > /dev/null
 echo ""
 echo "Bootstrapping vaults..."
 echo "Bootstrapping Vault 1..."
-cast send $VAULT1 "bootstrapCreatorStake()" --value 100ether --rpc-url $RPC_URL --private-key $CREATOR1_KEY
+cast send $VAULT1 "bootstrapCreatorStake()" --value 0.001ether --rpc-url $RPC_URL --private-key $CREATOR1_KEY
 
 echo "Bootstrapping Vault 2..."
-cast send $VAULT2 "bootstrapCreatorStake()" --value 100ether --rpc-url $RPC_URL --private-key $CREATOR2_KEY
+cast send $VAULT2 "bootstrapCreatorStake()" --value 0.001ether --rpc-url $RPC_URL --private-key $CREATOR2_KEY
 
 echo "Bootstrapping Vault 3..."
-cast send $VAULT3 "bootstrapCreatorStake()" --value 100ether --rpc-url $RPC_URL --private-key $CREATOR3_KEY
+cast send $VAULT3 "bootstrapCreatorStake()" --value 0.001ether --rpc-url $RPC_URL --private-key $CREATOR3_KEY
 
 # Step 6: Mint some tokens
 echo ""
 echo "Minting tokens..."
-cast send $VAULT1 "mintTokens(uint256)" 1000000000000000000 --value 2ether --rpc-url $RPC_URL --private-key $FAN1_KEY
-cast send $VAULT2 "mintTokens(uint256)" 500000000000000000 --value 1ether --rpc-url $RPC_URL --private-key $FAN1_KEY
+cast send $VAULT1 "mintTokens(uint256)" 5000000000000000000 --value 0.01ether --rpc-url $RPC_URL --private-key $FAN1_KEY
+cast send $VAULT2 "mintTokens(uint256)" 3000000000000000000 --value 0.005ether --rpc-url $RPC_URL --private-key $FAN1_KEY
 
 # Step 7: Save vault info
 echo ""
@@ -132,4 +143,10 @@ echo "Vault 1 (TECH): $VAULT1"
 echo "Vault 2 (ART): $VAULT2" 
 echo "Vault 3 (MUSIC): $VAULT3"
 echo "Vault info saved to test-vaults.json"
+echo ""
+echo "Final verification:"
+FINAL_AURA1=$(cast call $ORACLE "getAura(address)" $VAULT1 --rpc-url $RPC_URL)
+FINAL_SUPPLY_CAP1=$(cast call $VAULT1 "getCurrentSupplyCap()" --rpc-url $RPC_URL)
+echo "Vault 1 final aura: $FINAL_AURA1"
+echo "Vault 1 supply cap: $FINAL_SUPPLY_CAP1"
 echo "========================================="

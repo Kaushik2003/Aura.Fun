@@ -32,7 +32,7 @@ contract Demo is Script {
 
     // Demo parameters
     uint256 public constant DEMO_FID = 1398844;
-    uint256 public constant CREATOR_BOOTSTRAP = 100 ether; // 100 CELO for stage 1
+    uint256 public constant CREATOR_BOOTSTRAP = 0.001 ether; // 0.001 CELO for stage 1
     uint256 public constant FAN1_MINT_AMOUNT = 200 ether; // 200 tokens
     uint256 public constant FAN2_MINT_AMOUNT = 150 ether; // 150 tokens
 
@@ -138,7 +138,7 @@ contract Demo is Script {
             "Demo Creator Token",
             "DEMO",
             creator,
-            1000 ether
+            1 ether
         );
         vault = CreatorVault(payable(vaultAddress));
         token = CreatorToken(tokenAddress);
@@ -147,7 +147,7 @@ contract Demo is Script {
         console.log("Vault address:", address(vault));
         console.log("Token address:", address(token));
         console.log("Creator FID (off-chain):", DEMO_FID);
-        console.log("Base capacity: 1000 tokens");
+        console.log("Base capacity: 1 token");
 
         vm.stopBroadcast();
 
@@ -249,15 +249,14 @@ contract Demo is Script {
 
         // Log state after mint
         (
-            uint256 creatorColl,
+            ,
             uint256 fanColl,
             uint256 totalColl,
             uint256 supply,
-            uint256 newPeg,
-            uint8 stage,
+            ,
+            ,
             uint256 health
         ) = vault.getVaultState();
-        uint256 aura = vault.getCurrentAura();
 
         console.log("Mint successful!");
         console.log("Fan1 token balance:", token.balanceOf(fan1) / 1 ether);
@@ -478,7 +477,7 @@ contract Demo is Script {
         // Check health
         (
             uint256 creatorColl,
-            uint256 fanColl,
+            ,
             uint256 totalColl,
             uint256 supply,
             uint256 peg,
