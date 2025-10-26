@@ -77,27 +77,30 @@ export default function VaultsPage() {
 
     if (isLoading) {
         return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="flex justify-between items-center mb-6">
-                    <h1 className="text-3xl font-bold">Discover Creator Vaults</h1>
-                    <p className="text-gray-600">Browse and invest in creator tokens</p>
+            <div className="min-h-screen bg-black pt-24">
+                <div className="container mx-auto px-4 py-8">
+                    <div className="flex justify-between items-center mb-6">
+                        <h1 className="text-3xl font-bold text-white">Discover Creator Vaults</h1>
+                        <p className="text-gray-400">Browse and invest in creator tokens</p>
+                    </div>
+                    <VaultCardSkeleton count={6} />
                 </div>
-                <VaultCardSkeleton count={6} />
             </div>
         )
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="flex justify-between items-center mb-6">
-                <div>
-                    <h1 className="text-3xl font-bold">Discover Creator Vaults</h1>
-                    <p className="text-gray-600">Browse and invest in creator tokens</p>
+        <div className="min-h-screen bg-black pt-24">
+            <div className="container mx-auto px-4 py-8">
+                <div className="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 className="text-3xl font-bold text-white">Discover Creator Vaults</h1>
+                        <p className="text-gray-400">Browse and invest in creator tokens</p>
+                    </div>
+                    <div className="text-sm text-gray-400">
+                        {sortedVaults?.length || 0} vaults found
+                    </div>
                 </div>
-                <div className="text-sm text-gray-500">
-                    {sortedVaults?.length || 0} vaults found
-                </div>
-            </div>
 
             <VaultFilters
                 filters={filters}
@@ -109,8 +112,8 @@ export default function VaultsPage() {
             {sortedVaults && sortedVaults.length === 0 ? (
                 <div className="text-center py-12">
                     <div className="text-gray-400 text-6xl mb-4">🔍</div>
-                    <h3 className="text-xl font-semibold text-gray-600 mb-2">No vaults found</h3>
-                    <p className="text-gray-500">Try adjusting your filters to see more results</p>
+                    <h3 className="text-xl font-semibold text-white mb-2">No vaults found</h3>
+                    <p className="text-gray-400">Try adjusting your filters to see more results</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
@@ -119,6 +122,7 @@ export default function VaultsPage() {
                     ))}
                 </div>
             )}
+            </div>
         </div>
     )
 }

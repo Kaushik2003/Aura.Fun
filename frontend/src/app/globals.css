@@ -2,19 +2,105 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+    /* Primary: Emerald - Modern, trustworthy */
+    --primary: 160 84% 39%;
+    --primary-foreground: 160 84% 90%;
 
-body {
-  color: rgb(var(--foreground));
-  background: rgb(var(--background));
+    /* Background: Pure black for premium feel */
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
+
+    /* Card: Dark slate */
+    --card: 240 10% 12%;
+    --card-foreground: 0 0% 95%;
+
+    /* Secondary: Cyan accent */
+    --secondary: 200 84% 39%;
+    --secondary-foreground: 0 0% 5%;
+
+    /* Muted: Gray for secondary states */
+    --muted: 240 10% 30%;
+    --muted-foreground: 240 10% 70%;
+
+    /* Accent: Bright emerald */
+    --accent: 160 84% 39%;
+    --accent-foreground: 0 0% 5%;
+
+    /* Popover & Border */
+    --popover: 240 10% 12%;
+    --popover-foreground: 0 0% 95%;
+    --border: 240 10% 20%;
+    --input: 240 10% 15%;
+
+    /* Ring & Destructive */
+    --ring: 160 84% 39%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Charts */
+    --chart-1: 160 84% 39%;
+    --chart-2: 200 84% 39%;
+    --chart-3: 120 60% 50%;
+    --chart-4: 40 84% 39%;
+    --chart-5: 300 70% 50%;
+
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --primary: 160 84% 39%;
+    --primary-foreground: 0 0% 5%;
+
+    --background: 0 0% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --secondary: 200 84% 39%;
+    --secondary-foreground: 0 0% 5%;
+
+    --muted: 240 10% 30%;
+    --muted-foreground: 240 10% 70%;
+
+    --accent: 160 84% 39%;
+    --accent-foreground: 0 0% 5%;
+
+    --popover: 240 10% 12%;
+    --popover-foreground: 0 0% 95%;
+    --border: 240 10% 20%;
+    --input: 240 10% 15%;
+
+    --ring: 160 84% 39%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 95%;
+
+    --chart-1: 160 84% 39%;
+    --chart-2: 200 84% 39%;
+    --chart-3: 120 60% 50%;
+    --chart-4: 40 84% 39%;
+    --chart-5: 300 70% 50%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
 }

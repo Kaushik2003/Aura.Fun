@@ -201,10 +201,12 @@ export default function CreateVaultPage() {
     // Don't render if wallet not connected
     if (!address) {
         return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="max-w-md mx-auto text-center">
-                    <h2 className="text-2xl font-bold mb-4">Connect Your Wallet</h2>
-                    <p className="text-gray-600">Connect your wallet to create a new vault</p>
+            <div className="min-h-screen bg-black pt-24">
+                <div className="container mx-auto px-4 py-8">
+                    <div className="max-w-md mx-auto text-center">
+                        <h2 className="text-2xl font-bold mb-4 text-white">Connect Your Wallet</h2>
+                        <p className="text-gray-400">Connect your wallet to create a new vault</p>
+                    </div>
                 </div>
             </div>
         )
@@ -213,118 +215,120 @@ export default function CreateVaultPage() {
     // Render form
     if (creationStep === 'form') {
         return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="max-w-2xl mx-auto">
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold mb-2">Create New Vault</h1>
-                        <p className="text-gray-600">
-                            Deploy a new creator vault with automatic aura score calculation
-                        </p>
+            <div className="min-h-screen bg-black pt-24">
+                <div className="container mx-auto px-4 py-8">
+                    <div className="max-w-2xl mx-auto">
+                        <div className="mb-8">
+                            <h1 className="text-4xl font-bold mb-2 text-white">Create New Vault</h1>
+                            <p className="text-gray-400 text-lg">
+                                Deploy a new creator vault with automatic aura score calculation
+                            </p>
+                        </div>
+
+                        {isWrongNetwork && (
+                            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 mb-6 backdrop-blur">
+                                <p className="text-yellow-300">
+                                    Please switch to the correct network before creating a vault.
+                                </p>
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label htmlFor="name" className="block text-base font-medium text-gray-300 mb-2">
+                                        Token Name
+                                    </label>
+                                    <input
+                                        {...register('name')}
+                                        type="text"
+                                        id="name"
+                                        placeholder="e.g., Creator Token"
+                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-white placeholder-gray-500 text-base"
+                                    />
+                                    {errors.name && (
+                                        <p className="mt-1 text-sm text-red-400">{errors.name.message}</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label htmlFor="symbol" className="block text-base font-medium text-gray-300 mb-2">
+                                        Token Symbol
+                                    </label>
+                                    <input
+                                        {...register('symbol')}
+                                        type="text"
+                                        id="symbol"
+                                        placeholder="e.g., CRTR"
+                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-white placeholder-gray-500 text-base"
+                                    />
+                                    {errors.symbol && (
+                                        <p className="mt-1 text-sm text-red-400">{errors.symbol.message}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div>
+                                <label htmlFor="baseCap" className="block text-base font-medium text-gray-300 mb-2">
+                                    Base Capacity (tokens)
+                                </label>
+                                <input
+                                    {...register('baseCap')}
+                                    type="number"
+                                    id="baseCap"
+                                    step="0.01"
+                                    min="0"
+                                    placeholder="e.g., 10000"
+                                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-white placeholder-gray-500 text-base"
+                                />
+                                {errors.baseCap && (
+                                    <p className="mt-1 text-sm text-red-400">{errors.baseCap.message}</p>
+                                )}
+                                <p className="mt-1 text-sm text-gray-400">
+                                    Base capacity for supply cap calculation. Higher values allow more tokens to be minted.
+                                </p>
+                            </div>
+
+                            <div>
+                                <label htmlFor="farcasterUsername" className="block text-base font-medium text-gray-300 mb-2">
+                                    Farcaster Username
+                                </label>
+                                <div className="relative">
+                                    <span className="absolute left-4 top-3.5 text-gray-400 text-base">@</span>
+                                    <input
+                                        {...register('farcasterUsername')}
+                                        type="text"
+                                        id="farcasterUsername"
+                                        placeholder="username"
+                                        className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-white placeholder-gray-500 text-base"
+                                    />
+                                </div>
+                                {errors.farcasterUsername && (
+                                    <p className="mt-1 text-sm text-red-400">{errors.farcasterUsername.message}</p>
+                                )}
+                                <p className="mt-1 text-sm text-gray-400">
+                                    Your Farcaster username for automatic aura score calculation based on engagement metrics.
+                                </p>
+                            </div>
+
+                            <div className="flex gap-4 pt-4">
+                                <button
+                                    type="button"
+                                    onClick={() => router.back()}
+                                    className="px-8 py-4 border-2 border-white/30 text-white rounded-lg hover:bg-white/10 transition-colors font-semibold text-lg"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    disabled={!isValid || isWrongNetwork || isWritePending || isConfirming}
+                                    className="flex-1 px-8 py-4 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-semibold text-lg"
+                                >
+                                    {isWritePending || isConfirming ? 'Creating Vault...' : 'Create Vault'}
+                                </button>
+                            </div>
+                        </form>
                     </div>
-
-                    {isWrongNetwork && (
-                        <div className="bg-yellow-100 border border-yellow-400 rounded-lg p-4 mb-6">
-                            <p className="text-yellow-800">
-                                Please switch to the correct network before creating a vault.
-                            </p>
-                        </div>
-                    )}
-
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Token Name
-                                </label>
-                                <input
-                                    {...register('name')}
-                                    type="text"
-                                    id="name"
-                                    placeholder="e.g., Creator Token"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                />
-                                {errors.name && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
-                                )}
-                            </div>
-
-                            <div>
-                                <label htmlFor="symbol" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Token Symbol
-                                </label>
-                                <input
-                                    {...register('symbol')}
-                                    type="text"
-                                    id="symbol"
-                                    placeholder="e.g., CRTR"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                />
-                                {errors.symbol && (
-                                    <p className="mt-1 text-sm text-red-600">{errors.symbol.message}</p>
-                                )}
-                            </div>
-                        </div>
-
-                        <div>
-                            <label htmlFor="baseCap" className="block text-sm font-medium text-gray-700 mb-2">
-                                Base Capacity (tokens)
-                            </label>
-                            <input
-                                {...register('baseCap')}
-                                type="number"
-                                id="baseCap"
-                                step="0.01"
-                                min="0"
-                                placeholder="e.g., 10000"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                            {errors.baseCap && (
-                                <p className="mt-1 text-sm text-red-600">{errors.baseCap.message}</p>
-                            )}
-                            <p className="mt-1 text-sm text-gray-500">
-                                Base capacity for supply cap calculation. Higher values allow more tokens to be minted.
-                            </p>
-                        </div>
-
-                        <div>
-                            <label htmlFor="farcasterUsername" className="block text-sm font-medium text-gray-700 mb-2">
-                                Farcaster Username
-                            </label>
-                            <div className="relative">
-                                <span className="absolute left-3 top-2 text-gray-500">@</span>
-                                <input
-                                    {...register('farcasterUsername')}
-                                    type="text"
-                                    id="farcasterUsername"
-                                    placeholder="username"
-                                    className="w-full pl-8 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                />
-                            </div>
-                            {errors.farcasterUsername && (
-                                <p className="mt-1 text-sm text-red-600">{errors.farcasterUsername.message}</p>
-                            )}
-                            <p className="mt-1 text-sm text-gray-500">
-                                Your Farcaster username for automatic aura score calculation based on engagement metrics.
-                            </p>
-                        </div>
-
-                        <div className="flex gap-4">
-                            <button
-                                type="button"
-                                onClick={() => router.back()}
-                                className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                disabled={!isValid || isWrongNetwork || isWritePending || isConfirming}
-                                className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                            >
-                                {isWritePending || isConfirming ? 'Creating Vault...' : 'Create Vault'}
-                            </button>
-                        </div>
-                    </form>
                 </div>
             </div>
         )
