@@ -43,13 +43,13 @@ export function WalletConnect() {
     return (
         <div className="flex items-center gap-4">
             {isWrongNetwork && (
-                <div className="bg-yellow-100 border border-yellow-400 px-4 py-2 rounded-lg">
-                    <p className="text-sm text-yellow-800 mb-1">
+                <div className="bg-yellow-500/20 border border-yellow-500/50 px-4 py-2 rounded-lg backdrop-blur">
+                    <p className="text-sm text-yellow-300 mb-1">
                         Wrong network: {chain?.name}. Please switch to {targetChain.name}
                     </p>
                     <button
                         onClick={() => switchChain({ chainId: targetChain.id })}
-                        className="text-sm underline text-yellow-900 hover:text-yellow-700"
+                        className="text-sm underline text-yellow-200 hover:text-yellow-100"
                     >
                         Switch Network
                     </button>
@@ -57,15 +57,15 @@ export function WalletConnect() {
             )}
 
             <div className="text-sm text-right">
-                <p className="font-mono text-gray-900">{formatAddress(address)}</p>
-                <p className="text-gray-600">
+                <p className="font-mono text-white font-medium">{formatAddress(address)}</p>
+                <p className="text-emerald-400 font-semibold">
                     {balance ? `${parseFloat(balance.formatted).toFixed(4)} ${balance.symbol}` : 'Loading...'}
                 </p>
             </div>
 
             <button
                 onClick={() => disconnect()}
-                className="px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                className="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all border border-white/20 hover:border-white/30 font-medium"
             >
                 Disconnect
             </button>

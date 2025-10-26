@@ -27,14 +27,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black`}
       >
         <ErrorBoundary>
           <Providers>
             <Navigation />
-            <main>
+            <main className="min-h-screen">
               {children}
             </main>
             <Toaster
@@ -42,9 +42,9 @@ export default function RootLayout({
               toastOptions={{
                 duration: 5000,
                 style: {
-                  background: 'white',
-                  border: '1px solid #e5e7eb',
-                  color: '#374151',
+                  background: '#1f2937',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: '#f3f4f6',
                 },
               }}
             />

@@ -12,10 +12,12 @@ export default function CreatorDashboardPage() {
 
     if (!address) {
         return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold mb-4">Connect Your Wallet</h2>
-                    <p className="text-gray-600">Connect your wallet to view your creator dashboard</p>
+            <div className="min-h-screen bg-black pt-24">
+                <div className="container mx-auto px-4 py-8">
+                    <div className="text-center">
+                        <h2 className="text-2xl font-bold mb-4 text-white">Connect Your Wallet</h2>
+                        <p className="text-gray-400">Connect your wallet to view your creator dashboard</p>
+                    </div>
                 </div>
             </div>
         )
@@ -23,18 +25,20 @@ export default function CreatorDashboardPage() {
 
     if (isLoading) {
         return (
-            <div className="container mx-auto px-4 py-8">
-                <div className="animate-pulse">
-                    <div className="h-8 bg-gray-200 rounded w-64 mb-6"></div>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                        {[...Array(4)].map((_, i) => (
-                            <div key={i} className="h-24 bg-gray-200 rounded"></div>
-                        ))}
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {[...Array(2)].map((_, i) => (
-                            <div key={i} className="h-48 bg-gray-200 rounded"></div>
-                        ))}
+            <div className="min-h-screen bg-black pt-24">
+                <div className="container mx-auto px-4 py-8">
+                    <div className="animate-pulse">
+                        <div className="h-8 bg-white/10 rounded w-64 mb-6"></div>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                            {[...Array(4)].map((_, i) => (
+                                <div key={i} className="h-24 bg-white/10 rounded"></div>
+                            ))}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {[...Array(2)].map((_, i) => (
+                                <div key={i} className="h-48 bg-white/10 rounded"></div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -42,12 +46,13 @@ export default function CreatorDashboardPage() {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">Creator Dashboard</h1>
+        <div className="min-h-screen bg-black pt-24">
+            <div className="container mx-auto px-4 py-8">
+                <div className="flex justify-between items-center mb-6">
+                    <h1 className="text-3xl font-bold text-white">Creator Dashboard</h1>
                 <Link
                     href="/creator/create"
-                    className="bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition-colors"
+                    className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-semibold"
                 >
                     Create New Vault
                 </Link>
@@ -56,20 +61,20 @@ export default function CreatorDashboardPage() {
             {stats && <CreatorStats stats={stats} />}
 
             {vaults && vaults.length === 0 ? (
-                <div className="border rounded-lg p-8 text-center">
+                <div className="border border-white/10 bg-white/5 backdrop-blur rounded-lg p-8 text-center">
                     <div className="max-w-md mx-auto">
-                        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
                         </div>
-                        <h3 className="text-xl font-bold mb-2">No Vaults Yet</h3>
-                        <p className="text-gray-600 mb-4">
+                        <h3 className="text-xl font-bold mb-2 text-white">No Vaults Yet</h3>
+                        <p className="text-gray-400 mb-4">
                             Create your first vault to start building your creator economy and engage with your fans through tokenized support.
                         </p>
                         <Link
                             href="/creator/create"
-                            className="inline-block bg-blue-600 text-white px-6 py-3 rounded hover:bg-blue-700 transition-colors"
+                            className="inline-block bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-semibold"
                         >
                             Create Your First Vault
                         </Link>
@@ -78,8 +83,8 @@ export default function CreatorDashboardPage() {
             ) : (
                 <div className="space-y-6">
                     <div className="flex justify-between items-center">
-                        <h2 className="text-xl font-semibold">Your Vaults</h2>
-                        <p className="text-gray-600">{vaults?.length} vault{vaults?.length !== 1 ? 's' : ''}</p>
+                        <h2 className="text-xl font-semibold text-white">Your Vaults</h2>
+                        <p className="text-gray-400">{vaults?.length} vault{vaults?.length !== 1 ? 's' : ''}</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {vaults?.map(vault => (
@@ -88,6 +93,7 @@ export default function CreatorDashboardPage() {
                     </div>
                 </div>
             )}
+            </div>
         </div>
     )
 }
