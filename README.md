@@ -1,6 +1,8 @@
-# AuraFi - Creator Vaults
+# Aura.Fun - Creator Vaults
 
-AuraFi is a dual-collateral protocol where creators and fans jointly back creator tokens on Celo. Creators stake CELO to unlock minting stages, while fans deposit CELO to mint tokens. A creator's Aura score (derived from Farcaster activity) dynamically adjusts token value (peg) and supply caps, with forced contraction and liquidation mechanisms ensuring aligned incentives.
+Aura.Fun — dual-collateral, stake-backed token with on-chain reputation peg, dynamic minting, and vault health enforcement. Built for creators, backed by fans.
+
+Aura.Fun is a dual-collateral protocol where creators and fans jointly back creator tokens on Celo. Creators stake CELO to unlock minting stages, while fans deposit CELO to mint tokens. A creator's Aura score (derived from Farcaster activity) dynamically adjusts token value (peg) and supply caps, with forced contraction and liquidation mechanisms ensuring aligned incentives.
 
 ## Overview
 
@@ -551,5 +553,6 @@ This is an MVP implementation for demonstration and testing purposes. Contributi
 - Security-critical changes require thorough review
 
 ## License
+
 
 MIT
