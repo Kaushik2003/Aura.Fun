@@ -1,8 +1,8 @@
-# AuraFi Creator Vaults - Design Document
+# AuraFun Creator Vaults - Design Document
 
 ## Overview
 
-AuraFi implements a dual-collateral protocol where creators and fans jointly back creator tokens. The system uses Farcaster-derived aura scores to dynamically adjust token pegs and supply caps, creating aligned incentives through forced contraction and liquidation mechanisms.
+AuraFun implements a dual-collateral protocol where creators and fans jointly back creator tokens. The system uses Farcaster-derived aura scores to dynamically adjust token pegs and supply caps, creating aligned incentives through forced contraction and liquidation mechanisms.
 
 ### Core Architecture Principles
 
