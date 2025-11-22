@@ -10,8 +10,8 @@ export { useUserPositions } from './use-user-positions'
 export { useCreatorVaults } from './use-creator-vaults'
 
 // Treasury hooks
-export { useTreasuryBalance } from './use-treasury-balance'
-export { useTreasuryEvents } from './use-treasury-events'
+// export { useTreasuryBalance } from './use-treasury-balance'
+// export { useTreasuryEvents } from './use-treasury-events'
 
 // Utility hooks
 export { useNetworkConfig } from './use-network-config'

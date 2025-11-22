@@ -22,7 +22,7 @@ export default function AdminPage() {
 
     // Check if user is treasury owner
     const { data: treasuryOwner, isLoading: ownerLoading } = useReadContract({
-        address: getContractAddress('TREASURY'),
+        address: getContractAddress('treasury'),
         abi: TREASURY_ABI,
         functionName: 'owner',
     })
@@ -116,7 +116,7 @@ export default function AdminPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div>
                         <p className="text-blue-700 font-medium">Treasury Contract:</p>
-                        <p className="font-mono text-blue-600">{getContractAddress('TREASURY')}</p>
+                        <p className="font-mono text-blue-600">{getContractAddress('treasury')}</p>
                     </div>
                     <div>
                         <p className="text-blue-700 font-medium">Owner Address:</p>

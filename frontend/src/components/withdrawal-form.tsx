@@ -69,7 +69,7 @@ export function WithdrawalForm({ currentBalance, onSuccess }: WithdrawalFormProp
             }
 
             writeContract({
-                address: getContractAddress('TREASURY'),
+                address: getContractAddress('treasury'),
                 abi: TREASURY_ABI,
                 functionName: 'withdraw',
                 args: [data.to as `0x${string}`, amountWei]
