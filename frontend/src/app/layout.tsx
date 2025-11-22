@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AuraFi - Creator Token Platform",
+  title: "Aura.Farm - Creator Token Platform",
   description: "A decentralized platform for creator tokens backed by dual collateral",
 };
 

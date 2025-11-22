@@ -19,7 +19,7 @@ export function Navigation() {
                 <div className="flex items-center justify-between h-16">
                     <div className="flex items-center gap-8">
                         <Link href="/" className="text-xl font-bold text-gray-900">
-                            AuraFi
+                            Aura.Farm
                         </Link>
 
                         <div className="flex gap-4">

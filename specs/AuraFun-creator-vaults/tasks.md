@@ -671,7 +671,7 @@
   - Create script/Demo.s.sol Foundry script with comprehensive workflow
   - Deploy all contracts (factory, treasury, oracle)
   - Create test vault for demo creator (FID tracked off-chain)
-  - Bootstrap creator stake to unlock stage 1 (100 CELO)
+  - Bootstrap creator stake to unlock stage 1 (0.001 CELO)
   - Push mock oracle updates for automated testing (initial aura ~136)
   - Simulate fan mints at stage 1 with proper qty calculations
   - Push increased aura (~175) to demonstrate peg increase

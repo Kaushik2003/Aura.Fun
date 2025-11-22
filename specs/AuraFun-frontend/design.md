@@ -653,7 +653,7 @@ export function CreatorVaultCard({ vault }: CreatorVaultCardProps) {
     vault.health >= 120 ? 'text-yellow-600' :
     'text-red-600'
 
-  const nextStageRequirements = [0, 100, 500, 2500, 10000]
+  const nextStageRequirements = [0, 0.001, 0.003, 0.008, 0.018]
   const nextStage = vault.stage < 4 ? vault.stage + 1 : null
   const nextStageRequired = nextStage ? nextStageRequirements[nextStage] : null
 
@@ -764,7 +764,7 @@ export default function FanVaultDetailPage({ params }: { params: { address: stri
       {vault.stage === 0 && (
         <div className="bg-yellow-50 border border-yellow-400 rounded-lg p-4 mb-6">
           <p className="text-yellow-800">
-            This vault is not yet active. The creator needs to bootstrap it with 100 CELO first.
+            This vault is not yet active. The creator needs to bootstrap it with 0.001 CELO first.
           </p>
         </div>
       )}

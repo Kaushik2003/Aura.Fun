@@ -230,7 +230,7 @@
 
 
   - Create `components/bootstrap-form.tsx` with CELO input
-  - Pre-fill with 100 CELO minimum requirement
+  - Pre-fill with 0.001 CELO minimum requirement
   - Add validation for minimum amount
   - Implement bootstrapCreatorStake() transaction
   - Display success message and update stage

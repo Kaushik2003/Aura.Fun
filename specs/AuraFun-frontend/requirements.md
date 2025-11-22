@@ -143,9 +143,9 @@ The frontend will support three primary user roles: **Creators** (who deploy and
 #### Acceptance Criteria
 
 1. WHEN a creator views their vault detail page with stage = 0, THE Frontend_Application SHALL display a "Bootstrap Vault" form with CELO amount input
-2. WHEN the form is displayed, THE Frontend_Application SHALL show the Stage 1 requirement (100 CELO) and explain that bootstrapping unlocks fan minting
-3. WHEN a creator enters a CELO amount, THE Frontend_Application SHALL validate that amount ≥ 100 CELO (Stage 1 requirement)
-4. IF amount < 100 CELO, THEN THE Frontend_Application SHALL display an error message "Minimum 100 CELO required to unlock Stage 1"
+2. WHEN the form is displayed, THE Frontend_Application SHALL show the Stage 1 requirement (0.001 CELO) and explain that bootstrapping unlocks fan minting
+3. WHEN a creator enters a CELO amount, THE Frontend_Application SHALL validate that amount ≥ 0.001 CELO (Stage 1 requirement)
+4. IF amount < 0.001 CELO, THEN THE Frontend_Application SHALL display an error message "Minimum 0.001 CELO required to unlock Stage 1"
 5. WHEN validation passes, THE Frontend_Application SHALL call vault.bootstrapCreatorStake() with msg.value = entered amount
 6. WHEN the transaction succeeds, THE Frontend_Application SHALL display a success toast "Stage 1 unlocked!", refetch vault data, and update the stage indicator
 7. WHEN stage updates to 1, THE Frontend_Application SHALL hide the bootstrap form and show the stage progression UI
@@ -228,7 +228,7 @@ The frontend will support three primary user roles: **Creators** (who deploy and
 #### Acceptance Criteria
 
 1. WHEN a transaction reverts with "InsufficientCollateral", THE Frontend_Application SHALL display error message "Not enough CELO. Please add more collateral."
-2. WHEN a transaction reverts with "StageNotUnlocked", THE Frontend_Application SHALL display error message "Vault not bootstrapped. Creator must deposit 100 CELO first."
+2. WHEN a transaction reverts with "StageNotUnlocked", THE Frontend_Application SHALL display error message "Vault not bootstrapped. Creator must deposit 0.001 CELO first."
 3. WHEN a transaction reverts with "ExceedsStageCap", THE Frontend_Application SHALL display error message "Stage capacity reached. Wait for creator to unlock next stage."
 4. WHEN a transaction reverts with "ExceedsSupplyCap", THE Frontend_Application SHALL display error message "Supply cap reached due to low aura. Wait for aura to increase."
 5. WHEN a transaction reverts with "HealthTooLow", THE Frontend_Application SHALL display error message "This action would drop vault health below 150%. Reduce quantity or add more collateral."

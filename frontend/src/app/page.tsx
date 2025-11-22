@@ -30,7 +30,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-20">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              Welcome to <span className="text-yellow-300">AuraFi</span>
+              Welcome to <span className="text-yellow-300">Aura.Farm</span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-blue-100">
               The decentralized platform where creators launch tokenized vaults backed by dual collateral,
@@ -74,7 +74,7 @@ export default function Home() {
               Protocol Overview
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Real-time metrics from the AuraFi ecosystem
+              Real-time metrics from the Aura.Farm ecosystem
             </p>
           </div>
 
@@ -123,7 +123,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              How AuraFi Works
+              How Aura.Farm Works
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               A simple three-step process for creators and fans
@@ -181,7 +181,7 @@ export default function Home() {
           </h2>
           <p className="text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
             Join the creator economy revolution. Whether you're a creator looking to tokenize
-            your community or a fan wanting to support your favorites, AuraFi has you covered.
+            your community or a fan wanting to support your favorites, Aura.Farm has you covered.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

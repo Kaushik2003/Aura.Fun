@@ -684,10 +684,10 @@ stageCount = 5;
 
 // Stage configs (example)
 stages[0] = StageConfig(0, 0);
-stages[1] = StageConfig(100e18, 500e18);      // 100 CELO, 500 tokens
-stages[2] = StageConfig(300e18, 2500e18);     // 300 CELO cumulative, 2500 tokens cumulative
-stages[3] = StageConfig(800e18, 9500e18);     // 800 CELO, 9500 tokens
-stages[4] = StageConfig(1800e18, 34500e18);   // 1800 CELO, 34500 tokens
+stages[1] = StageConfig(0.001e18, 50e18);      // 0.001 CELO, 50 tokens
+stages[2] = StageConfig(0.003e18, 250e18);     // 0.003 CELO cumulative, 250 tokens cumulative
+stages[3] = StageConfig(0.008e18, 950e18);     // 0.008 CELO, 950 tokens
+stages[4] = StageConfig(0.018e18, 3450e18);   // 0.018 CELO, 3450 tokens
 ```
 
 ### Network Deployment
