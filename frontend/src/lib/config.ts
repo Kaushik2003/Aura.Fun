@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 // Environment validation schema
 const envSchema = z.object({
-  NEXT_PUBLIC_NETWORK: z.enum(['anvil', 'sepolia']),
+  NEXT_PUBLIC_NETWORK: z.enum(['anvil', 'sepolia', 'celo_sepolia']),
   NEXT_PUBLIC_RPC_URL: z.string().url(),
   NEXT_PUBLIC_VAULT_FACTORY_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/),
   NEXT_PUBLIC_AURA_ORACLE_ADDRESS: z.string().regex(/^0x[a-fA-F0-9]{40}$/),
@@ -13,7 +13,7 @@ const envSchema = z.object({
 
 // Network configuration type
 export type NetworkConfig = {
-  network: 'anvil' | 'sepolia'
+  network: 'anvil' | 'sepolia' | 'celo_sepolia'
   chainId: number
   chainName: string
   rpcUrl: string
@@ -48,7 +48,7 @@ function validateEnv() {
 // Get validated configuration
 export function getConfig(): NetworkConfig {
   const env = validateEnv()
-  
+
   // Check for placeholder addresses
   const placeholderAddress = '0x0000000000000000000000000000000000000000'
   if (
@@ -107,6 +107,22 @@ export const NETWORK_CONFIGS = {
     },
     blockExplorers: {
       default: { name: 'Etherscan', url: 'https://sepolia.etherscan.io' },
+    },
+  },
+  celo_sepolia: {
+    chainId: 11142220,
+    name: 'Celo Sepolia',
+    rpcUrls: {
+      default: { http: ['https://rpc.ankr.com/celo_sepolia'] },
+      public: { http: ['https://rpc.ankr.com/celo_sepolia'] },
+    },
+    nativeCurrency: {
+      name: 'Celo',
+      symbol: 'CELO',
+      decimals: 18,
+    },
+    blockExplorers: {
+      default: { name: 'CeloScan', url: 'https://sepolia.celoscan.io' },
     },
   },
 } as const
