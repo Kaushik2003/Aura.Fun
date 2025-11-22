@@ -1,5 +1,5 @@
 /**
- * @file Hook exports for AuraFi frontend
+ * @file Hook exports for Aura.farm frontend
  * @description Centralized exports for all custom hooks
  */
 

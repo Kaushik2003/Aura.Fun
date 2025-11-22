@@ -16,18 +16,6 @@ AuraFi implements a creator economy protocol with the following key features:
 ### Key Concepts
 
 **Positions**: Each time a fan mints tokens, a Position struct is created recording the quantity, collateral deposited (minus fees), stage at mint time, and timestamp. Positions are stored in an array per fan address, enabling:
-- Fair FIFO redemptions (oldest positions redeemed first)
-- Proportional forced burns (each position loses tokens/collateral pro-rata)
-- Accurate collateral attribution (no global pool confusion)
-
-**Stages**: Discrete progression levels (0-4 in default config) that gate minting capacity. Creators must stake cumulative CELO amounts to unlock each stage, which increases the maximum token supply fans can mint. Stage 0 = vault created but not bootstrapped (no minting allowed).
-
-**Peg Calculation**: The CELO-per-token exchange rate is calculated dynamically as `P(aura) = BASE_PRICE * (1 + K * (aura/A_REF - 1))`, bounded between 0.3 and 3.0 CELO. Higher aura = higher peg = more valuable tokens.
-
-**Health Ratio**: Vault collateralization calculated as `Health = totalCollateral / (totalSupply * peg)`. Must be ≥150% for minting, liquidatable if <120%.
-
-**Forced Burn**: When oracle updates cause supply to exceed the aura-based supply cap, anyone can call `checkAndTriggerForcedBurn()` to start a 24-hour grace period. After the deadline, anyone can call `executeForcedBurn(maxOwners)` to proportionally burn tokens and write down collateral across all positions. Batched processing prevents gas limit issues with many position owners.
-
 **Liquidation**: When health <120%, liquidators pay CELO via `liquidate()` to buy down supply, earning a 1% bounty. The protocol calculates how many tokens to burn to restore health to 150%, burns them pro-rata across positions, pays the bounty, adds remaining CELO to vault collateral, and extracts a creator penalty.
 
 ## Architecture
@@ -337,40 +325,6 @@ function getAura(address vault) external view returns (uint256)
 - **Treasury**: `0x1205E28b0e1A0E3Bf968908d9AD9Ac073A1F12eE`
 - **AuraOracle**: `0xa585e63cfAeFc513198d70FbA741B22d8116C2d0`
 - **VaultFactory**: `0x3A788A0d02BD1691E46aCcF296518574fcd919A6`
-
-View on [Celo Explorer](https://alfajores.celoscan.io/)
-
-## Key Parameters (MVP)
-
-### Peg Function
-- `BASE_PRICE`: 1 CELO
-- `A_REF`: 100 (baseline aura)
-- `K`: 0.5 (sensitivity)
-- `P_MIN`: 0.3 CELO
-- `P_MAX`: 3.0 CELO
-
-### Collateralization
-- `MIN_CR`: 150% (minimum collateralization ratio)
-- `LIQ_CR`: 120% (liquidation threshold)
-- `MINT_FEE`: 0.5%
-- `LIQUIDATION_BOUNTY`: 1%
-
-### Time Windows
-- `FORCED_BURN_GRACE`: 24 hours
-- `ORACLE_UPDATE_COOLDOWN`: 6 hours
-
-### Default Stage Configurations
-- Stage 0: 0 CELO stake, 0 tokens capacity
-- Stage 1: 100 CELO stake, 500 tokens capacity
-- Stage 2: 300 CELO stake, 2500 tokens capacity
-- Stage 3: 800 CELO stake, 9500 tokens capacity
-- Stage 4: 1800 CELO stake, 34500 tokens capacity
-
-## Security Considerations
-
-### Access Control
-- CreatorToken mint/burn restricted to vault contract only
-- AuraOracle updates restricted to registered oracle address
 - VaultFactory admin functions restricted to owner
 - All state-changing functions protected with reentrancy guards
 

@@ -277,7 +277,7 @@ async function pinToIPFS(data: any): Promise<string> {
       body: JSON.stringify({
         pinataContent: data,
         pinataMetadata: {
-          name: `aurafi-metrics-${data.fid}-${data.timestamp}`,
+          name: `aurafarm-metrics-${data.fid}-${data.timestamp}`,
         },
       }),
     })
@@ -392,7 +392,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { vaultAddress, farcasterUsername } = requestSchema.parse(body)
 
-    console.log('🌟 AuraFi Oracle API')
+    console.log('🌟 Aura.farm Oracle API')
     console.log('==================')
     console.log(`Vault: ${vaultAddress}`)
     console.log(`Creator Username: @${farcasterUsername}`)

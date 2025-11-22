@@ -1,6 +1,6 @@
 # Environment Configuration Guide
 
-This document explains how to configure the AuraFi frontend for different networks (Anvil local development and Sepolia testnet).
+This document explains how to configure the Aura.farm frontend for different networks (Anvil local development and Sepolia testnet).
 
 ## Overview
 

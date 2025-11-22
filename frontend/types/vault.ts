@@ -274,10 +274,10 @@ export const VAULT_CONSTANTS = {
   FORCED_BURN_GRACE: 24 * 60 * 60,
   /** Oracle update cooldown (6 hours in seconds) */
   ORACLE_UPDATE_COOLDOWN: 6 * 60 * 60,
-  /** Minimum peg (0.3 CELO) */
-  P_MIN: BigInt('300000000000000000'),
-  /** Maximum peg (3.0 CELO) */
-  P_MAX: BigInt('3000000000000000000'),
+  /** Minimum peg (0.0001 CELO) */
+  P_MIN: BigInt('100000000000000'),
+  /** Maximum peg (0.01 CELO) */
+  P_MAX: BigInt('10000000000000000'),
   /** Reference aura value */
   A_REF: 100,
   /** Minimum aura */

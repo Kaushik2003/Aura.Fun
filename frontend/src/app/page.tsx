@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation />
+      {/* <Navigation /> */}
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white">
@@ -215,7 +215,7 @@ export default function Home() {
       <footer className="bg-gray-900 text-white py-8">
         <div className="container mx-auto px-4 text-center">
           <div className="mb-4">
-            <span className="text-2xl font-bold">AuraFi</span>
+            <span className="text-2xl font-bold">Aura.farm</span>
           </div>
           <p className="text-gray-400 mb-4">
             Decentralized creator tokens backed by dual collateral

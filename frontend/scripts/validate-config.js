@@ -73,7 +73,7 @@ function validateEnvFile(filePath, networkType) {
 }
 
 function main() {
-    console.log('🚀 AuraFi Frontend Configuration Validator')
+    console.log('🚀 Aura.farm Frontend Configuration Validator')
 
     const envLocalPath = path.join(__dirname, '../.env.local')
     const envProdPath = path.join(__dirname, '../.env.production')

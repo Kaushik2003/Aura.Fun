@@ -100,8 +100,8 @@ cast send $VAULT3 "bootstrapCreatorStake()" --value 0.001ether --rpc-url $RPC_UR
 # Step 6: Mint some tokens
 echo ""
 echo "Minting tokens..."
-cast send $VAULT1 "mintTokens(uint256)" 5000000000000000000 --value 11ether --rpc-url $RPC_URL --private-key $FAN1_KEY
-cast send $VAULT2 "mintTokens(uint256)" 3000000000000000000 --value 6ether --rpc-url $RPC_URL --private-key $FAN1_KEY
+cast send $VAULT1 "mintTokens(uint256)" 5000000000000000000 --value 0.02ether --rpc-url $RPC_URL --private-key $FAN1_KEY
+cast send $VAULT2 "mintTokens(uint256)" 3000000000000000000 --value 0.01ether --rpc-url $RPC_URL --private-key $FAN1_KEY
 
 # Step 7: Save vault info
 echo ""

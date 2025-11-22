@@ -1,6 +1,6 @@
 /**
- * @file Contract ABIs for AuraFi Protocol
- * @description Contains ABI definitions for all smart contracts in the AuraFi protocol
+ * @file Contract ABIs for Aura.farm Protocol
+ * @description Contains ABI definitions for all smart contracts in the Aura.farm protocol
  */
 
 export const VAULT_ABI = [

@@ -11,7 +11,9 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  */
 interface IAuraOracle {
     function getAura(address vault) external view returns (uint256);
-    function getLastUpdateTimestamp(address vault) external view returns (uint256);
+    function getLastUpdateTimestamp(
+        address vault
+    ) external view returns (uint256);
 }
 
 /**
@@ -22,7 +24,11 @@ interface IAuraOracle {
 interface ICreatorToken {
     function mint(address to, uint256 amount) external;
     function burn(address from, uint256 amount) external;
-    function transferFrom(address from, address to, uint256 amount) external returns (bool);
+    function transferFrom(
+        address from,
+        address to,
+        uint256 amount
+    ) external returns (bool);
 }
 
 /**
@@ -60,12 +66,12 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
     uint256 public constant WAD = 1e18;
 
     // Peg function parameters
-    uint256 public constant BASE_PRICE = 1e18; // 1 CELO base price
+    uint256 public constant BASE_PRICE = 0.001e18; // 0.001 CELO base price
     uint256 public constant A_REF = 100; // Reference aura value
     uint256 public constant A_MIN = 0; // Minimum aura
     uint256 public constant A_MAX = 200; // Maximum aura
-    uint256 public constant P_MIN = 0.3e18; // Minimum peg (0.3 CELO)
-    uint256 public constant P_MAX = 3.0e18; // Maximum peg (3.0 CELO)
+    uint256 public constant P_MIN = 0.0001e18; // Minimum peg (0.0001 CELO)
+    uint256 public constant P_MAX = 0.01e18; // Maximum peg (0.01 CELO)
     uint256 public constant K = 0.5e18; // Peg sensitivity (WAD)
 
     // Collateralization parameters
@@ -132,17 +138,43 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
 
     // ============ Events ============
 
-    event StageUnlocked(address indexed vault, uint8 stage, uint256 stakeAmount);
+    event StageUnlocked(
+        address indexed vault,
+        uint8 stage,
+        uint256 stakeAmount
+    );
     event Minted(
-        address indexed vault, address indexed minter, uint256 qty, uint256 collateral, uint8 stage, uint256 peg
+        address indexed vault,
+        address indexed minter,
+        uint256 qty,
+        uint256 collateral,
+        uint8 stage,
+        uint256 peg
     );
-    event Redeemed(address indexed vault, address indexed redeemer, uint256 qty, uint256 collateralReturned);
+    event Redeemed(
+        address indexed vault,
+        address indexed redeemer,
+        uint256 qty,
+        uint256 collateralReturned
+    );
     event SupplyCapShrink(
-        address indexed vault, uint256 oldCap, uint256 newCap, uint256 pendingBurn, uint256 graceEndTs
+        address indexed vault,
+        uint256 oldCap,
+        uint256 newCap,
+        uint256 pendingBurn,
+        uint256 graceEndTs
     );
-    event ForcedBurnExecuted(address indexed vault, uint256 tokensBurned, uint256 collateralWrittenDown);
+    event ForcedBurnExecuted(
+        address indexed vault,
+        uint256 tokensBurned,
+        uint256 collateralWrittenDown
+    );
     event LiquidationExecuted(
-        address indexed vault, address indexed liquidator, uint256 payCELO, uint256 tokensRemoved, uint256 bounty
+        address indexed vault,
+        address indexed liquidator,
+        uint256 payCELO,
+        uint256 tokensRemoved,
+        uint256 bounty
     );
 
     // ============ Custom Errors ============
@@ -235,7 +267,9 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
 
         // Calculate peg: BASE_PRICE * (1 + kDelta)
         // BASE_PRICE is in WAD, kDelta is in WAD, so: BASE_PRICE + BASE_PRICE * kDelta / WAD
-        int256 pegRaw = int256(BASE_PRICE) + (int256(BASE_PRICE) * kDelta) / int256(WAD);
+        int256 pegRaw = int256(BASE_PRICE) +
+            (int256(BASE_PRICE) * kDelta) /
+            int256(WAD);
 
         // Clamp to [P_MIN, P_MAX]
         if (pegRaw < int256(P_MIN)) {
@@ -267,7 +301,9 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
 
         // Calculate SupplyCap = BaseCap * (1 + scaleFactor)
         // BaseCap is in token units, scaleFactor is in WAD
-        int256 supplyCap = int256(baseCap) + (int256(baseCap) * scaleFactor) / int256(WAD);
+        int256 supplyCap = int256(baseCap) +
+            (int256(baseCap) * scaleFactor) /
+            int256(WAD);
 
         // Clamp to [BaseCap * 0.25, BaseCap * 4]
         uint256 minCap = baseCap / 4; // 0.25 * baseCap
@@ -333,7 +369,9 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
      * @param qty Quantity of tokens to mint
      * @return Required collateral in CELO (WAD units)
      */
-    function calculateRequiredCollateral(uint256 qty) internal view returns (uint256) {
+    function calculateRequiredCollateral(
+        uint256 qty
+    ) internal view returns (uint256) {
         // Get current peg dynamically from oracle
         uint256 currentPeg = getPeg();
 
@@ -365,8 +403,15 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
      * @param _stakeRequired Cumulative creator stake required to unlock this stage
      * @param _mintCap Maximum tokens mintable at this stage (cumulative)
      */
-    function setStageConfig(uint8 _stage, uint256 _stakeRequired, uint256 _mintCap) external onlyOwner {
-        stageConfigs[_stage] = StageConfig({stakeRequired: _stakeRequired, mintCap: _mintCap});
+    function setStageConfig(
+        uint8 _stage,
+        uint256 _stakeRequired,
+        uint256 _mintCap
+    ) external onlyOwner {
+        stageConfigs[_stage] = StageConfig({
+            stakeRequired: _stakeRequired,
+            mintCap: _mintCap
+        });
     }
 
     /**
@@ -456,7 +501,9 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
      *      Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 9.1
      * @param qty Quantity of tokens to mint
      */
-    function mintTokens(uint256 qty) external payable nonReentrant whenNotPaused {
+    function mintTokens(
+        uint256 qty
+    ) external payable nonReentrant whenNotPaused {
         // Validate stage is unlocked
         if (stage == 0) {
             revert StageNotUnlocked();
@@ -488,7 +535,9 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
         }
 
         // Transfer fee to treasury
-        (bool feeSuccess,) = treasury.call{value: fee}(abi.encodeWithSignature("collectFee()"));
+        (bool feeSuccess, ) = treasury.call{value: fee}(
+            abi.encodeWithSignature("collectFee()")
+        );
         require(feeSuccess, "Fee transfer failed");
 
         // Calculate actual collateral (msg.value minus fee)
@@ -496,7 +545,11 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
 
         // Create new Position
         Position memory newPosition = Position({
-            owner: msg.sender, qty: qty, collateral: actualCollateral, stage: stage, createdAt: block.timestamp
+            owner: msg.sender,
+            qty: qty,
+            collateral: actualCollateral,
+            stage: stage,
+            createdAt: block.timestamp
         });
 
         // Add position to positions[msg.sender] array
@@ -526,7 +579,14 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
 
         // Emit Minted event with current peg
         uint256 currentPeg = getPeg();
-        emit Minted(address(this), msg.sender, qty, actualCollateral, stage, currentPeg);
+        emit Minted(
+            address(this),
+            msg.sender,
+            qty,
+            actualCollateral,
+            stage,
+            currentPeg
+        );
     }
 
     /**
@@ -561,11 +621,14 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
             }
 
             // Calculate burnFromPosition = min(position.qty, qtyRemaining)
-            uint256 burnFromPosition = position.qty < qtyRemaining ? position.qty : qtyRemaining;
+            uint256 burnFromPosition = position.qty < qtyRemaining
+                ? position.qty
+                : qtyRemaining;
 
             // Calculate collateralFromPosition = (position.collateral * burnFromPosition) / position.qty
             // Using WAD math for precision
-            uint256 collateralFromPosition = (position.collateral * burnFromPosition) / position.qty;
+            uint256 collateralFromPosition = (position.collateral *
+                burnFromPosition) / position.qty;
 
             // Add to total collateral to return
             collateralToReturn += collateralFromPosition;
@@ -616,7 +679,7 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
         totalSupply -= qty;
 
         // Transfer collateralToReturn CELO to msg.sender
-        (bool success,) = msg.sender.call{value: collateralToReturn}("");
+        (bool success, ) = msg.sender.call{value: collateralToReturn}("");
         require(success, "CELO transfer failed");
 
         // Emit Redeemed event
@@ -642,9 +705,15 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
             uint256 newCap = currentSupplyCap;
             pendingForcedBurn = totalSupply - currentSupplyCap;
             forcedBurnDeadline = block.timestamp + FORCED_BURN_GRACE;
-            
+
             // Emit SupplyCapShrink event
-            emit SupplyCapShrink(address(this), oldCap, newCap, pendingForcedBurn, forcedBurnDeadline);
+            emit SupplyCapShrink(
+                address(this),
+                oldCap,
+                newCap,
+                pendingForcedBurn,
+                forcedBurnDeadline
+            );
         }
     }
 
@@ -657,8 +726,8 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
      *      Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8
      */
     function liquidate() external payable nonReentrant whenNotPaused {
-        // Define minimum payment constant (0.01 CELO)
-        uint256 minPayCELO = 0.01e18;
+        // Define minimum payment constant (0.00001 CELO)
+        uint256 minPayCELO = 0.00001e18;
 
         // Calculate current health
         uint256 currentHealth = calculateHealth();
@@ -678,7 +747,10 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
 
         // Calculate tokensToRemove = totalSupply - ((totalCollateral + msg.value) / (peg * MIN_CR / WAD))
         // Rearranging: tokensToRemove = totalSupply - ((totalCollateral + msg.value) * WAD) / (peg * MIN_CR)
-        uint256 targetSupply = wadDiv((totalCollateral + msg.value), wadMul(currentPeg, MIN_CR));
+        uint256 targetSupply = wadDiv(
+            (totalCollateral + msg.value),
+            wadMul(currentPeg, MIN_CR)
+        );
 
         // Verify tokensToRemove > 0
         if (totalSupply <= targetSupply) {
@@ -703,14 +775,16 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
                 }
 
                 // Calculate pro-rata burn: floor((position.qty * tokensToRemove) / totalSupply)
-                uint256 burnFromPosition = (position.qty * tokensToRemove) / totalSupply;
+                uint256 burnFromPosition = (position.qty * tokensToRemove) /
+                    totalSupply;
 
                 if (burnFromPosition == 0) {
                     continue;
                 }
 
                 // Calculate collateral write-down (collateral is NOT returned, it's written down)
-                uint256 collateralWriteDown = (position.collateral * burnFromPosition) / position.qty;
+                uint256 collateralWriteDown = (position.collateral *
+                    burnFromPosition) / position.qty;
 
                 // Reduce position
                 position.qty -= burnFromPosition;
@@ -732,7 +806,7 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
         uint256 bounty = wadMul(msg.value, LIQUIDATION_BOUNTY);
 
         // Transfer bounty to msg.sender immediately
-        (bool bountySuccess,) = msg.sender.call{value: bounty}("");
+        (bool bountySuccess, ) = msg.sender.call{value: bounty}("");
         require(bountySuccess, "Bounty transfer failed");
 
         // Add (msg.value - bounty) to totalCollateral
@@ -760,7 +834,9 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
             totalCollateral -= creatorPenalty;
 
             // Transfer creatorPenalty to liquidator
-            (bool penaltySuccess,) = msg.sender.call{value: creatorPenalty}("");
+            (bool penaltySuccess, ) = msg.sender.call{value: creatorPenalty}(
+                ""
+            );
             require(penaltySuccess, "Penalty transfer failed");
         }
 
@@ -768,7 +844,13 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
         totalSupply -= totalBurned;
 
         // Emit LiquidationExecuted event
-        emit LiquidationExecuted(address(this), msg.sender, msg.value, tokensToRemove, bounty);
+        emit LiquidationExecuted(
+            address(this),
+            msg.sender,
+            msg.value,
+            tokensToRemove,
+            bounty
+        );
     }
 
     // ============ View Functions ============
@@ -798,7 +880,15 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
             uint256 health
         )
     {
-        return (creatorCollateral, fanCollateral, totalCollateral, totalSupply, getPeg(), stage, calculateHealth());
+        return (
+            creatorCollateral,
+            fanCollateral,
+            totalCollateral,
+            totalSupply,
+            getPeg(),
+            stage,
+            calculateHealth()
+        );
     }
 
     /**
@@ -809,7 +899,10 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
      * @param index Index in the owner's positions array
      * @return Position struct containing owner, qty, collateral, stage, and createdAt
      */
-    function getPosition(address owner, uint256 index) external view returns (Position memory) {
+    function getPosition(
+        address owner,
+        uint256 index
+    ) external view returns (Position memory) {
         if (index >= positions[owner].length) {
             revert InsufficientCollateral();
         }
@@ -864,7 +957,9 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
 
         // Determine how many owners to process
         uint256 ownersLength = positionOwners.length;
-        uint256 ownersToProcess = maxOwnersToProcess < ownersLength ? maxOwnersToProcess : ownersLength;
+        uint256 ownersToProcess = maxOwnersToProcess < ownersLength
+            ? maxOwnersToProcess
+            : ownersLength;
 
         // Iterate through positionOwners array up to maxOwnersToProcess limit
         for (uint256 i = 0; i < ownersToProcess; i++) {
@@ -882,7 +977,8 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
 
                 // Calculate burnFromPosition = floor((position.qty * pendingForcedBurn) / totalSupply)
                 // This is pro-rata burning based on position's share of total supply
-                uint256 burnFromPosition = (position.qty * pendingForcedBurn) / totalSupply;
+                uint256 burnFromPosition = (position.qty * pendingForcedBurn) /
+                    totalSupply;
 
                 // Skip if nothing to burn from this position
                 if (burnFromPosition == 0) {
@@ -890,7 +986,8 @@ contract CreatorVault is ReentrancyGuard, Pausable, Ownable {
                 }
 
                 // Calculate collateralWriteDown = (position.collateral * burnFromPosition) / position.qty
-                uint256 collateralWriteDown = (position.collateral * burnFromPosition) / position.qty;
+                uint256 collateralWriteDown = (position.collateral *
+                    burnFromPosition) / position.qty;
 
                 // Reduce position.qty by burnFromPosition
                 position.qty -= burnFromPosition;

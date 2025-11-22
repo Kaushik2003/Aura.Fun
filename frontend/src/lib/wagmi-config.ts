@@ -1,5 +1,4 @@
 import { http, createConfig } from 'wagmi'
-import { sepolia } from 'wagmi/chains'
 import { getDefaultConfig } from '@rainbow-me/rainbowkit'
 import { getConfig, NETWORK_CONFIGS } from './config'
 
@@ -25,8 +24,33 @@ const anvilChain = {
   },
 } as const
 
+// Define Celo Sepolia chain configuration
+const celoSepoliaChain = {
+  id: 11142220,
+  name: 'Celo Sepolia',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'Celo',
+    symbol: 'CELO',
+  },
+  rpcUrls: {
+    default: {
+      http: ['https://rpc.ankr.com/celo_sepolia'],
+    },
+    public: {
+      http: ['https://rpc.ankr.com/celo_sepolia'],
+    },
+  },
+  blockExplorers: {
+    default: { name: 'CeloScan', url: 'https://sepolia.celoscan.io' },
+  },
+  testnet: true,
+} as const
+
 // Select chain based on environment
-const chains = config.network === 'anvil' ? [anvilChain] : [sepolia]
+const chains = config.network === 'anvil'
+  ? [anvilChain]
+  : [celoSepoliaChain]
 
 // Create wagmi configuration with RainbowKit
 export const wagmiConfig = getDefaultConfig({
