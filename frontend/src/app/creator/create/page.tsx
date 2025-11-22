@@ -16,13 +16,6 @@ import { useNetworkConfig } from '../../../../hooks/use-network-config'
 const createVaultSchema = z.object({
     name: z.string().min(1, 'Token name is required').max(50, 'Token name too long'),
     symbol: z.string().min(1, 'Token symbol is required').max(10, 'Token symbol too long').regex(/^[A-Z0-9]+$/, 'Symbol must be uppercase letters and numbers only'),
-    baseCap: z.string().min(1, 'Base capacity is required').refine(
-        (val) => {
-            const num = parseFloat(val)
-            return !isNaN(num) && num > 0
-        },
-        'Base capacity must be a positive number'
-    ),
     farcasterUsername: z.string().min(1, 'Farcaster username is required').max(50, 'Username too long').regex(/^[a-zA-Z0-9_-]+$/, 'Username can only contain letters, numbers, hyphens, and underscores'),
 })
 
@@ -167,7 +160,9 @@ export default function CreateVaultPage() {
             setCreationStep('creating')
             setErrorMessage('')
 
-            const baseCapWei = parseEther(data.baseCap)
+            // Hardcoded base capacity to 4700 tokens as per protocol spec
+            // 3450 (Stage 4) + 950 (Stage 3) + 250 (Stage 2) + 50 (Stage 1) = 4700
+            const baseCapWei = parseEther('4700')
 
             writeContract({
                 address: getContractAddress('vaultFactory'),
@@ -265,26 +260,7 @@ export default function CreateVaultPage() {
                             </div>
                         </div>
 
-                        <div>
-                            <label htmlFor="baseCap" className="block text-sm font-medium text-gray-700 mb-2">
-                                Base Capacity (tokens)
-                            </label>
-                            <input
-                                {...register('baseCap')}
-                                type="number"
-                                id="baseCap"
-                                step="0.01"
-                                min="0"
-                                placeholder="e.g., 10000"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                            {errors.baseCap && (
-                                <p className="mt-1 text-sm text-red-600">{errors.baseCap.message}</p>
-                            )}
-                            <p className="mt-1 text-sm text-gray-500">
-                                Base capacity for supply cap calculation. Higher values allow more tokens to be minted.
-                            </p>
-                        </div>
+
 
                         <div>
                             <label htmlFor="farcasterUsername" className="block text-sm font-medium text-gray-700 mb-2">
