@@ -1,0 +1,80 @@
+{
+  "network": "Celo Sepolia",
+  "factory": "0x31223a93cB835aC9B338Cf5819f0109e4fEDD783",
+  "oracle": "0x3A788A0d02BD1691E46aCcF296518574fcd919A6",
+  "deployer": "0xCB1799Aa5A71ccB295dD9f1fD5Fc7D21A89D4E98",
+  "accounts": [
+    "0x6Ad6359c38d3ffF76e4486AD006e16311A44A53D",
+    "0x442d76deFED76e1d152C47B5711CD959e518Fb98",
+    "0x945434c6Af1B2BD46f8fA2A4118625530eD0449F",
+    "0xE46E603B56AF485Dd71A9AADE917A90B55dd634D",
+    "0x2A335C82891cbE8268d2eb72F712b0A03B62F77E",
+    "0x213ad2184d9c25aA7F24A11a369A78601dF3522E",
+    "0x291584580FF81502a34Dd5fE2716BC72c62d0246",
+    "0x5190C19AC656e0925fA33C303128DcE235f345CB",
+    "0xBe73e4d8Caf1B3D2CC770bFc16E9Fd5D3cbA7B12",
+    "0xA2Cbb75d9C0C5b1Ddf6811c78CfaAf33d0E14618"
+  ],
+  "vaults": [
+    {
+      "name": "Pepe",
+      "symbol": "PEPE",
+      "address": "0xa96edcffa458018dfbff1b6aa07a444439e96cf8",
+      "creator": "0x6Ad6359c38d3ffF76e4486AD006e16311A44A53D"
+    },
+    {
+      "name": "Doge",
+      "symbol": "DOGE",
+      "address": "0xe0cfe159589aad25fd3672101ad550d3b47713c6",
+      "creator": "0x442d76deFED76e1d152C47B5711CD959e518Fb98"
+    },
+    {
+      "name": "Shiba",
+      "symbol": "SHIB",
+      "address": "0x89f5bb052a8488a290a125eec02e7e0a04642648",
+      "creator": "0x945434c6Af1B2BD46f8fA2A4118625530eD0449F"
+    },
+    {
+      "name": "Bonk",
+      "symbol": "BONK",
+      "address": "0x4d9684c45dd601e4e864886c620e01771e82807f",
+      "creator": "0xE46E603B56AF485Dd71A9AADE917A90B55dd634D"
+    },
+    {
+      "name": "Wif",
+      "symbol": "WIF",
+      "address": "0x1d464360898b7ec80d08524bda1d35187df00057",
+      "creator": "0x2A335C82891cbE8268d2eb72F712b0A03B62F77E"
+    },
+    {
+      "name": "Floki",
+      "symbol": "FLOKI",
+      "address": "0x15b4b123acba6883ec1fa2677fd02d6419f169d3",
+      "creator": "0x213ad2184d9c25aA7F24A11a369A78601dF3522E"
+    },
+    {
+      "name": "Popcat",
+      "symbol": "POP",
+      "address": "0x4fcb08b3778de2fab827c43485627e7b4d845bd4",
+      "creator": "0x291584580FF81502a34Dd5fE2716BC72c62d0246"
+    },
+    {
+      "name": "Brett",
+      "symbol": "BRETT",
+      "address": "0x895544b9a0b9093ac71fac67021f0a932cd46bcc",
+      "creator": "0x5190C19AC656e0925fA33C303128DcE235f345CB"
+    },
+    {
+      "name": "Mog",
+      "symbol": "MOG",
+      "address": "0x09646cba50bc3d0ed90bc2f0db18b29f06c3fa09",
+      "creator": "0xBe73e4d8Caf1B3D2CC770bFc16E9Fd5D3cbA7B12"
+    },
+    {
+      "name": "Turbo",
+      "symbol": "TURBO",
+      "address": "0x9b5f7840b21a1be346aa9c25ae1835cca850b196",
+      "creator": "0xA2Cbb75d9C0C5b1Ddf6811c78CfaAf33d0E14618"
+    }
+  ]
+}
