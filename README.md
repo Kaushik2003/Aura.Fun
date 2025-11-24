@@ -1,6 +1,47 @@
 # AuraFi - Creator Vaults
 
-AuraFi is a dual-collateral protocol where creators and fans jointly back creator tokens on Celo. Creators stake CELO to unlock minting stages, while fans deposit CELO to mint tokens. A creator's Aura score (derived from Farcaster activity) dynamically adjusts token value (peg) and supply caps, with forced contraction and liquidation mechanisms ensuring aligned incentives.
+AuraFi is a dual-collateral protocol on Celo that enables creators and fans to jointly back creator tokens. By leveraging Farcaster activity to derive an "Aura Score," the protocol dynamically adjusts token pegs and supply caps, ensuring that token value is intrinsically tied to creator reputation and community engagement.
+
+## Deployed Contracts (Celo Mainnet)
+
+| Contract | Address |
+|----------|---------|
+| **Treasury** | `0xa585e63cfAeFc513198d70FbA741B22d8116C2d0` |
+| **AuraOracle** | `0x3A788A0d02BD1691E46aCcF296518574fcd919A6` |
+| **VaultFactory** | `0x31223a93cB835aC9B338Cf5819f0109e4fEDD783` |
+
+> [!NOTE]
+> - VaultFactory admin functions are restricted to the owner.
+> - All state-changing functions are protected with reentrancy guards.
+
+### Active Vaults
+
+| Name | Symbol | Address |
+|------|--------|---------|
+| **Pepe** | PEPE | `0xa96edcffa458018dfbff1b6aa07a444439e96cf8` |
+| **Doge** | DOGE | `0xe0cfe159589aad25fd3672101ad550d3b47713c6` |
+| **Shiba** | SHIB | `0x89f5bb052a8488a290a125eec02e7e0a04642648` |
+| **Bonk** | BONK | `0x4d9684c45dd601e4e864886c620e01771e82807f` |
+| **Wif** | WIF | `0x1d464360898b7ec80d08524bda1d35187df00057` |
+| **Floki** | FLOKI | `0x15b4b123acba6883ec1fa2677fd02d6419f169d3` |
+| **Popcat** | POPCAT | `0x4fcb08b3778de2fab827c43485627e7b4d845bd4` |
+| **Brett** | BRETT | `0x895544b9a0b9093ac71fac67021f0a932cd46bcc` |
+| **Mog** | MOG | `0x09646cba50bc3d0ed90bc2f0db18b29f06c3fa09` |
+| **Turbo** | TURBO | `0x9b5f7840b21a1be346aa9c25ae1835cca850b196` |
+
+## Project Status & Roadmap
+
+### Current Status
+The project is currently in a **Beta Testing Phase**. 
+*   **Vault Visibility**: Recently created vaults may not immediately appear on the frontend. We are actively integrating subgraphs to ensure real-time indexing and display of all vaults.
+*   **Audit Status**: Contracts are currently unaudited. Please exercise caution and do not use significant funds.
+
+### Roadmap
+*   **Aura Score Refinement**: Enhancing the stability and reliability of the Aura Score calculation algorithm.
+*   **Automated Market Makers (AMMs)**: Integrating AMMs to provide deeper liquidity for creator tokens.
+*   **Prediction Markets**: Launching "Aura Quests" and prediction markets to further gamify creator engagement.
+
+---
 
 ## Overview
 
@@ -15,7 +56,8 @@ AuraFi implements a creator economy protocol with the following key features:
 
 ### Key Concepts
 
-**Positions**: Each time a fan mints tokens, a Position struct is created recording the quantity, collateral deposited (minus fees), stage at mint time, and timestamp. Positions are stored in an array per fan address, enabling:
+**Positions**: Each time a fan mints tokens, a Position struct is created recording the quantity, collateral deposited (minus fees), stage at mint time, and timestamp. Positions are stored in an array per fan address.
+
 **Liquidation**: When health <120%, liquidators pay CELO via `liquidate()` to buy down supply, earning a 1% bounty. The protocol calculates how many tokens to burn to restore health to 150%, burns them pro-rata across positions, pays the bounty, adds remaining CELO to vault collateral, and extracts a creator penalty.
 
 ## Architecture
@@ -64,7 +106,6 @@ AuraFi implements a creator economy protocol with the following key features:
 - Access-controlled to registered oracle address(es)
 - Emits AuraUpdated events with vault, aura, ipfsHash, and timestamp
 - Vaults never store aura; they fetch it dynamically for all calculations
-- Oracle script updates only AuraOracle contract, not individual vaults
 
 **Treasury** (`Treasury.sol`)
 - Collects protocol fees from minting operations (0.5% of collateral)
@@ -320,33 +361,6 @@ function getAura(address vault) external view returns (uint256)
 6. **Bounty Paid**: Liquidator receives 1% bounty immediately
 7. **Health Restored**: Remaining payCELO added to vault collateral, creator penalty extracted, health restored to ≥150%
 
-## Deployed Contracts (Celo Alfajores)
-
-- **Treasury**: `0x1205E28b0e1A0E3Bf968908d9AD9Ac073A1F12eE`
-- **AuraOracle**: `0xa585e63cfAeFc513198d70FbA741B22d8116C2d0`
-- **VaultFactory**: `0x3A788A0d02BD1691E46aCcF296518574fcd919A6`
-- VaultFactory admin functions restricted to owner
-- All state-changing functions protected with reentrancy guards
-
-### Economic Security
-- Dual collateral ensures skin in the game for both creators and fans
-- Forced contraction maintains peg integrity after aura drops
-- Liquidation mechanism prevents undercollateralization
-- Grace periods allow orderly exits before forced burns
-- Minimum payment thresholds prevent griefing attacks
-
-### Oracle Trust Model
-- MVP uses single oracle address (dev/CI key)
-- All updates include IPFS evidence hash for verification
-- Cooldown prevents manipulation via rapid updates
-- Future: Multi-oracle consensus (Chainlink/UMA)
-
-### Audit Status
-- **Status**: Unaudited MVP
-- **Recommendation**: Do not use with significant funds
-- **Testnet Only**: Currently deployed on Celo Alfajores testnet
-- **Future**: Professional audit required before mainnet deployment
-
 ## MVP Limitations
 
 ### Current Scope
@@ -393,13 +407,6 @@ function getAura(address vault) external view returns (uint256)
 - Merkle trees for large position sets
 - Batch operations for multiple vaults
 - TWAP oracle integration
-
-## Documentation
-
-- [Oracle Documentation](oracle/README.md) - Detailed oracle setup and usage
-- [Design Document](.kiro/specs/aurafi-creator-vaults/design.md) - Comprehensive design and architecture
-- [Requirements Document](.kiro/specs/aurafi-creator-vaults/requirements.md) - Formal requirements specification
-- [Foundry Book](https://book.getfoundry.sh/) - Smart contract development framework
 
 ## Foundry Commands
 
@@ -493,6 +500,13 @@ cast --help
 **Oracle update fails with "CooldownNotElapsed"**
 - Must wait 6 hours between aura updates per vault
 - Check `lastUpdateTimestamp` in AuraOracle
+
+## Documentation
+
+- [Oracle Documentation](oracle/README.md) - Detailed oracle setup and usage
+- [Design Document](.kiro/specs/aurafi-creator-vaults/design.md) - Comprehensive design and architecture
+- [Requirements Document](.kiro/specs/aurafi-creator-vaults/requirements.md) - Formal requirements specification
+- [Foundry Book](https://book.getfoundry.sh/) - Smart contract development framework
 
 ## Contributing
 
